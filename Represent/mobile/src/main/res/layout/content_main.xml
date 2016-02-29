@@ -12,8 +12,28 @@
     tools:context="com.cs160.unzi.represent.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:orientation="vertical"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp" >
+        <EditText android:id="@+id/location_input"
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:hint="current location" />
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="78dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textSize="72dp"
+            android:id="@+id/dundun"
+            android:text="goodbye"
+            android:layout_below="@+id/location_input"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
 </RelativeLayout>
