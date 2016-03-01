@@ -25,7 +25,6 @@ public class MainActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Intent intent = getIntent();
 //        ArrayList<String> extras = intent.getStringArrayListExtra("SELECTED_REPS");
         Bundle extras = intent.getExtras();
@@ -36,8 +35,11 @@ public class MainActivity extends WearableActivity {
 //            mTextView.setText(extras.get(0));
 //        }
         mTextView = (TextView) findViewById(R.id.reps_output);
-        String lala = extras.getString("SOMETHING");
-        mTextView.setText(lala);
+
+        if (extras != null) {
+            String lala = extras.getString("SOMETHING");
+            mTextView.setText(lala);
+        }
 
 //        setAmbientEnabled();
 

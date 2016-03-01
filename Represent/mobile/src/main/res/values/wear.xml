@@ -2,6 +2,6 @@
 <!-- This entire file is necessary in order for the watch to locate the phone as a node -->
 <resources>
     <string-array name="android_wear_capabilities">
-        <item>reps</item>
+        <item>display_reps</item>
     </string-array>
 </resources>

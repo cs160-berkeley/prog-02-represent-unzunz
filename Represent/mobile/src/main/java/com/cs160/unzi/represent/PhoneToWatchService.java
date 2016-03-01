@@ -4,8 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -24,15 +27,14 @@ public class PhoneToWatchService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         return null;
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mApiClient = new GoogleApiClient.Builder(this)
+        mApiClient = new GoogleApiClient.Builder( this )
+                .addApi( Wearable.API )
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle connectionHint) {
@@ -42,7 +44,6 @@ public class PhoneToWatchService extends Service {
                     public void onConnectionSuspended(int cause) {
                     }
                 })
-                .addApi(Wearable.API)
                 .build();
     }
 
@@ -58,24 +59,27 @@ public class PhoneToWatchService extends Service {
         Bundle extras = intent.getExtras();
         final List<String> representatives = extras.getStringArrayList("REPRESENTATIVES");
 
+        Log.i("IN PHONETOWATCHSERVICE", "ALALA");
+
         // Send message
         new Thread(new Runnable() {
             @Override
             public void run() {
                 mApiClient.connect();
+                Log.i("connecting with client", "????");
                 sendMessage(SELECTED_REPS, representatives);
             }
-        });
-
+        }).start();
         return START_STICKY;
     }
 
+    private static final String DISPLAY_REP_CAPABILITY_NAME = "display_reps";
     private void sendMessage(final String path, final List<String> text) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
 
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
                 ByteArrayOutputStream byte_stream = new ByteArrayOutputStream();
                 DataOutputStream output_bytes = new DataOutputStream(byte_stream);
                 for (String element : text) {
@@ -85,11 +89,15 @@ public class PhoneToWatchService extends Service {
                         e.printStackTrace();
                     }
                 }
-                byte[] bytes = byte_stream.toByteArray();
 
+                List<Node> nodes_list = nodes.getNodes();
+                Log.i("Node length", Integer.toString(nodes_list.size()));
+                String fake = "HELLOSLDKFJDS";
+                byte[] bytes = byte_stream.toByteArray();
                 for (Node node : nodes.getNodes()) {
+                    Log.i("NODE", "???");
                     MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
-                        mApiClient, node.getId(), path, bytes
+                        mApiClient, node.getId(), path, fake.getBytes()
                     ).await();
                 }
             }
