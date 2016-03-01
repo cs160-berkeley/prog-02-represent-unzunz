@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WatchListenerService extends WearableListenerService {
-    private static final String SELECTED_REPS = "/Reps";
+    private static final String REGION_REPS = "/region_reps";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.i("PLEASE", "ON WATCH");
+
         Log.d("T", "in WatchListenerService, got: " + messageEvent.getPath());
-        if (messageEvent.getPath().equalsIgnoreCase(SELECTED_REPS)) {
+
+        if (messageEvent.getPath().equalsIgnoreCase(REGION_REPS)) {
+            Log.i("HELLO", "HELLO ITS ME");
             ArrayList<String> message_array = new ArrayList<String>();
             ByteArrayInputStream byte_stream = new ByteArrayInputStream(messageEvent.getData());
             DataInputStream input_data = new DataInputStream(byte_stream);
@@ -33,21 +35,16 @@ public class WatchListenerService extends WearableListenerService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-            Log.i("IN WATCHLISTENER", "ALALA");
-            for (String member : message_array) {
-                Log.i("Member name: ", member);
-            }
-            Intent intent = new Intent(this, MainActivity.class);
+
+            Intent intent = new Intent(this, CongressionalViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putStringArrayListExtra("SELECTED_REPS", message_array);
-            Log.d("T", "about to start watch MainActivity with SELECTED_REPS");
+            intent.putStringArrayListExtra("REGION_REPS", message_array);
             startActivity(intent);
         } else {
 //            super.onMessageReceived(messageEvent);
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("SOMETHING", "HILALALA");
+            intent.putExtra("SOMETHING", "Error");
             startActivity(intent);
         }
 

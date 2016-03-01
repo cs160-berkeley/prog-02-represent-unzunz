@@ -23,7 +23,7 @@ import java.util.List;
 public class PhoneToWatchService extends Service {
 
     private GoogleApiClient mApiClient;
-    private static final String SELECTED_REPS = "/Reps";
+    private static final String REGION_REPS = "/region_reps";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -63,13 +63,12 @@ public class PhoneToWatchService extends Service {
             @Override
             public void run() {
                 mApiClient.connect();
-                sendMessage(SELECTED_REPS, representatives);
+                sendMessage(REGION_REPS, representatives);
             }
         }).start();
         return START_STICKY;
     }
 
-    private static final String DISPLAY_REP_CAPABILITY_NAME = "display_reps";
     private void sendMessage(final String path, final List<String> text) {
         new Thread(new Runnable() {
             @Override
@@ -92,6 +91,7 @@ public class PhoneToWatchService extends Service {
 
                 byte[] bytes = byte_stream.toByteArray();
                 for (Node node : nodes.getNodes()) {
+                    Log.i("PATHNAME: ", path);
                     MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
                         mApiClient, node.getId(), path, bytes
                     ).await();

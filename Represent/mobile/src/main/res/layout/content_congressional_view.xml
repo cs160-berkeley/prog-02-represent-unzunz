@@ -12,12 +12,4 @@
     tools:context="com.cs160.unzi.represent.CongressionalViewActivity"
     tools:showIn="@layout/activity_congressional_view">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:id="@+id/congressional_content">
-    </LinearLayout>
 </RelativeLayout>
