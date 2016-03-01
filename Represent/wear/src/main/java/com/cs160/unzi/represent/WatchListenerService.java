@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WatchListenerService extends WearableListenerService {
-    private static final String SELECTED_REPS = "REPRESENTATIVES";
+    private static final String SELECTED_REPS = "/Reps";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {

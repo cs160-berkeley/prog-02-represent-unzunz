@@ -39,7 +39,6 @@ public class PhoneToWatchService extends Service {
                     @Override
                     public void onConnected(Bundle connectionHint) {
                     }
-
                     @Override
                     public void onConnectionSuspended(int cause) {
                     }
@@ -59,14 +58,11 @@ public class PhoneToWatchService extends Service {
         Bundle extras = intent.getExtras();
         final List<String> representatives = extras.getStringArrayList("REPRESENTATIVES");
 
-        Log.i("IN PHONETOWATCHSERVICE", "ALALA");
-
         // Send message
         new Thread(new Runnable() {
             @Override
             public void run() {
                 mApiClient.connect();
-                Log.i("connecting with client", "????");
                 sendMessage(SELECTED_REPS, representatives);
             }
         }).start();
@@ -91,13 +87,13 @@ public class PhoneToWatchService extends Service {
                 }
 
                 List<Node> nodes_list = nodes.getNodes();
+
                 Log.i("Node length", Integer.toString(nodes_list.size()));
-                String fake = "HELLOSLDKFJDS";
+
                 byte[] bytes = byte_stream.toByteArray();
                 for (Node node : nodes.getNodes()) {
-                    Log.i("NODE", "???");
                     MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
-                        mApiClient, node.getId(), path, fake.getBytes()
+                        mApiClient, node.getId(), path, bytes
                     ).await();
                 }
             }

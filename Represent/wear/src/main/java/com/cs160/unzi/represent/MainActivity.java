@@ -48,35 +48,35 @@ public class MainActivity extends WearableActivity {
 //        mClockView = (TextView) findViewById(R.id.clock);
 
     }
-//    @Override
-//    public void onEnterAmbient(Bundle ambientDetails) {
-//        super.onEnterAmbient(ambientDetails);
-//        updateDisplay();
-//    }
-//
-//    @Override
-//    public void onUpdateAmbient() {
-//        super.onUpdateAmbient();
-//        updateDisplay();
-//    }
-//
-//    @Override
-//    public void onExitAmbient() {
-//        updateDisplay();
-//        super.onExitAmbient();
-//    }
-//
-//    private void updateDisplay() {
-//        if (isAmbient()) {
-//            mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
-//            mTextView.setTextColor(getResources().getColor(android.R.color.white));
-//            mClockView.setVisibility(View.VISIBLE);
-//
-//            mClockView.setText(AMBIENT_DATE_FORMAT.format(new Date()));
-//        } else {
-//            mContainerView.setBackground(null);
-//            mTextView.setTextColor(getResources().getColor(android.R.color.black));
-//            mClockView.setVisibility(View.GONE);
-//        }
-//    }
+    @Override
+    public void onEnterAmbient(Bundle ambientDetails) {
+        super.onEnterAmbient(ambientDetails);
+        updateDisplay();
+    }
+
+    @Override
+    public void onUpdateAmbient() {
+        super.onUpdateAmbient();
+        updateDisplay();
+    }
+
+    @Override
+    public void onExitAmbient() {
+        updateDisplay();
+        super.onExitAmbient();
+    }
+
+    private void updateDisplay() {
+        if (isAmbient()) {
+            mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
+            mTextView.setTextColor(getResources().getColor(android.R.color.white));
+            mClockView.setVisibility(View.VISIBLE);
+
+            mClockView.setText(AMBIENT_DATE_FORMAT.format(new Date()));
+        } else {
+            mContainerView.setBackground(null);
+            mTextView.setTextColor(getResources().getColor(android.R.color.black));
+            mClockView.setVisibility(View.GONE);
+        }
+    }
 }

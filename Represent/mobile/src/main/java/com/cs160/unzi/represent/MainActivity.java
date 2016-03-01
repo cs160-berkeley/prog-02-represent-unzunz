@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public ArrayList<String> retrieveRepsAPI(String location) {
+    public ArrayList<String> retrieveRepsAPI() {
         ArrayList<String> representatives = new ArrayList<>();
         representatives.add("Barbara Lee");
         representatives.add("Barbara Lee");
@@ -60,19 +60,15 @@ public class MainActivity extends AppCompatActivity {
         TextView sampleView = (TextView) findViewById(R.id.dundun);
         sampleView.setText(location);
 
-        ArrayList<String> representatives = retrieveRepsAPI("LALALA");
-        Log.i("IN MAINACTIVITY 4 PHONE", "ALALA");
-        for (String member : representatives) {
-            Log.i("Member name: ", member);
-        }
-
+        ArrayList<String> representatives = retrieveRepsAPI();
 
         Intent congressionalIntent = new Intent(this, CongressionalViewActivity.class);
         congressionalIntent.putStringArrayListExtra("REPRESENTATIVES", representatives);
         startActivity(congressionalIntent);
-//        Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
-//        sendIntent.putStringArrayListExtra("REPRESENTATIVES", representatives);
-//        startService(sendIntent);
+
+        Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+        sendIntent.putStringArrayListExtra("REPRESENTATIVES", representatives);
+        startService(sendIntent);
     }
 
     @Override
