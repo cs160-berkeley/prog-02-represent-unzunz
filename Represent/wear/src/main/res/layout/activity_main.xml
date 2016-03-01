@@ -9,10 +9,10 @@
     tools:deviceIds="wear">
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/reps_output"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_world"
+        android:text="hello world"
         app:layout_box="all" />
 
     <TextView
