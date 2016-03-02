@@ -20,7 +20,7 @@ public class DetailedViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_view);
-
+        Log.i("HERE", "HERE");
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {

@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">Represent</string>
     <string name="title_activity_congressional_view">CongressionalViewActivity</string>
-    <string name="hello_round">H?djjjjjjjjjjjjjjjjjjjjdkaljflaksjdflkasdfjlkasdjf!</string>
-    <string name="hello_square">Hello Square World!</string>
-    <string name="title_activity_detailed_view">DetailedViewActivity</string>
 </resources>

@@ -58,8 +58,8 @@ public class CongressionalViewActivity extends Activity {
     }
 
     public void retrieveDetails(String rep_name) {
-        Intent intent = new Intent(this, DetailedViewActivity.class);
-        intent.putExtra("SELECTED_REP", rep_name);
-        startActivity(intent);
+        Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
+        sendIntent.putExtra("SELECTED_REP", rep_name);
+        startService(sendIntent);
     };
 }

@@ -32,7 +32,6 @@ public class CongressionalViewActivity extends AppCompatActivity {
                 click_listener.setRepName(member);
                 new_rep.setOnClickListener(click_listener);
                 hello.addView(new_rep);
-
             }
         }
     }
