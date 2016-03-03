@@ -25,14 +25,12 @@ public class MainActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            Log.i("ACCELEROMETER", "IS WORKINNN");
-        } else {
-            // booo no accelerometer
-        }
-
-
+//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+//            Log.i("ACCELEROMETER", "IS WORKINNN");
+//        } else {
+//            // booo no accelerometer
+//        }
 
     }
 }

@@ -23,22 +23,27 @@ public class WatchListenerService extends WearableListenerService {
 
         Log.d("T", "in WatchListenerService, got: " + messageEvent.getPath());
 
-        if (messageEvent.getPath().equalsIgnoreCase(REGION_REPS)) {
+        if (messageEvent.getPath().equalsIgnoreCase("LOCATION")) {
             Log.i("HELLO", "HELLO ITS ME");
-            ArrayList<String> message_array = new ArrayList<String>();
-            ByteArrayInputStream byte_stream = new ByteArrayInputStream(messageEvent.getData());
-            DataInputStream input_data = new DataInputStream(byte_stream);
-            try {
-                while (input_data.available() > 0) {
-                    message_array.add(input_data.readUTF());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            ArrayList<String> message_array = new ArrayList<String>();
+//            ByteArrayInputStream byte_stream = new ByteArrayInputStream(messageEvent.getData());
+//            DataInputStream input_data = new DataInputStream(byte_stream);
+//            try {
+//                while (input_data.available() > 0) {
+//                    message_array.add(input_data.readUTF());
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+            String location = new String(messageEvent.getData(), StandardCharsets.UTF_8);
 
             Intent intent = new Intent(this, CongressionalViewActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putStringArrayListExtra("REGION_REPS", message_array);
+            Log.i("WATCHLISTENER", location);
+
+//            intent.putStringArrayListExtra("REGION_REPS", message_array);
+            intent.putExtra("LOCATION", location);
             startActivity(intent);
         } else {
 //            super.onMessageReceived(messageEvent);

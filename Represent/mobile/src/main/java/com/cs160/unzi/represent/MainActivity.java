@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> retrieveRepParties(String location) {
         ArrayList<String> parties = new ArrayList<>();
         if (location.equals("94704")) {
-            parties.add("Democratic");
-            parties.add("Democratic");
-            parties.add("Democratic");
+            parties.add("D");
+            parties.add("D");
+            parties.add("D");
         } else {
-            parties.add("Republican");
-            parties.add("Republican");
-            parties.add("Democratic");
+            parties.add("R");
+            parties.add("R");
+            parties.add("D");
         }
         return parties;
     }
@@ -81,9 +81,11 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> retrievePresResults(String location) {
         ArrayList<String> results = new ArrayList<>();
         if (location.equals("94704")) {
+            results.add("94794");
             results.add("59.3%");
             results.add("38.3%");
         } else {
+            results.add("92123");
             results.add("52.6");
             results.add("45.0");
         }
@@ -144,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
         toCongressional.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
         startActivity(toCongressional);
 
-//        Intent toWatch = new Intent(getBaseContext(), PhoneToWatchService.class);
+        Intent toWatch = new Intent(getBaseContext(), PhoneToWatchService.class);
 //        toWatch.putStringArrayListExtra("REPRESENTATIVES", rep_names);
 //        toWatch.putStringArrayListExtra("PARTIES", rep_parties);
 //        toWatch.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
-//        startService(toWatch);
+        toWatch.putExtra("LOCATION", location);
+        startService(toWatch);
     }
 
     @Override

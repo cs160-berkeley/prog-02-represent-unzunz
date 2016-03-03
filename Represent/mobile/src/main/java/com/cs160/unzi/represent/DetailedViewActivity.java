@@ -27,7 +27,6 @@ public class DetailedViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
             String name = extras.getString("SELECTED_REP");
             TextView name_view = (TextView) findViewById(R.id.name);
             name_view.setText(name);

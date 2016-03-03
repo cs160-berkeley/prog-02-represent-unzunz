@@ -56,44 +56,51 @@ public class PhoneToWatchService extends Service {
     //gets called when a client calls startService(Intent)
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
-        final List<String> representatives = extras.getStringArrayList("REPRESENTATIVES");
+//        final List<String> names = extras.getStringArrayList("REPRESENTATIVES");
+//        final List<String> parties = extras.getStringArrayList("PARTIES");
+//        final List<String> pres_results = extras.getStringArrayList("PRESIDENTIAL");
+        final String location = extras.getString("LOCATION");
 
         // Send message
         new Thread(new Runnable() {
             @Override
             public void run() {
                 mApiClient.connect();
-                sendMessage(REGION_REPS, representatives);
+                sendMessage("LOCATION", location);
+//                sendMessage("NAMES", names);
+//                sendMessage("PARTIES", parties);
+//                sendMessage("PRESIDENTIAL", pres_results);
             }
         }).start();
         return START_STICKY;
     }
 
-    private void sendMessage(final String path, final List<String> text) {
+    private void sendMessage(final String path, final String text) {
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mApiClient).await();
-                ByteArrayOutputStream byte_stream = new ByteArrayOutputStream();
-                DataOutputStream output_bytes = new DataOutputStream(byte_stream);
-                for (String element : text) {
-                    try {
-                        output_bytes.writeUTF(element);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                ByteArrayOutputStream byte_stream = new ByteArrayOutputStream();
+//                DataOutputStream output_bytes = new DataOutputStream(byte_stream);
+//                for (String element : text) {
+//                    try {
+//                        output_bytes.writeUTF(element);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 
                 List<Node> nodes_list = nodes.getNodes();
 
                 Log.i("Node length", Integer.toString(nodes_list.size()));
 
-                byte[] bytes = byte_stream.toByteArray();
+//                byte[] bytes = byte_stream.toByteArray();
                 for (Node node : nodes.getNodes()) {
                     Log.i("PATHNAME: ", path);
                     MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
-                        mApiClient, node.getId(), path, bytes
+//                        mApiClient, node.getId(), path, bytes
+                            mApiClient, node.getId(), path, text.getBytes()
                     ).await();
                 }
             }
