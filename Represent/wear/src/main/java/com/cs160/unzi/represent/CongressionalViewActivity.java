@@ -41,10 +41,14 @@ public class CongressionalViewActivity extends FragmentActivity {
         final DotsPageIndicator mPageIndicator;
         final GridViewPager mViewPager;
 
-        final String[][] data = {
-            { "Row 0, Col 0", "Row 0, Col 1", "Row 0, Col 2" },
-            { "Row 1, Col 0", "Row 1, Col 1", "Row 1, Col 2" },
-            { "Row 2, Col 0", "Row 2, Col 1", "Row 2, Col 2" }
+        final String[][] rep_names = {
+            { "Barbara Lee", "Jerry McNerney", "Loni Hancock" },
+            { "Obama - 59.3%"}
+        };
+
+        final String[][] rep_parties = {
+            { "Democrat", "Democrat", "Democratic" },
+            { "Romney - 38.3%"}
         };
 
         // Get UI references
@@ -52,7 +56,7 @@ public class CongressionalViewActivity extends FragmentActivity {
         mViewPager = (GridViewPager) findViewById(R.id.pager);
 
         // Assigns an adapter to provide the content for this pager
-        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), data));
+        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties));
         mPageIndicator.setPager(mViewPager);
 
 
@@ -70,26 +74,28 @@ public class CongressionalViewActivity extends FragmentActivity {
     }
     private static final class GridPagerAdapter extends FragmentGridPagerAdapter {
 
-        String[][] mData;
+        String[][] repNames;
+        String[][] repParties;
 
-        private GridPagerAdapter(FragmentManager fm, String[][] data) {
+        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties) {
             super(fm);
-            mData = data;
+            repNames = rep_names;
+            repParties = rep_parties;
         }
 
         @Override
         public Fragment getFragment(int row, int column) {
-            return (CardFragment.create("CardFragment", mData[row][column]));
+            return (CardFragment.create(repNames[row][column], repParties[row][column]));
         }
 
         @Override
         public int getRowCount() {
-            return mData.length;
+            return repNames.length;
         }
 
         @Override
         public int getColumnCount(int row) {
-            return mData[row].length;
+            return repNames[row].length;
         }
     }
 
