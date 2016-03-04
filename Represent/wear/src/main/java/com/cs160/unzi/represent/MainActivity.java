@@ -25,12 +25,15 @@ public class MainActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-//            Log.i("ACCELEROMETER", "IS WORKINNN");
-//        } else {
-//            // booo no accelerometer
-//        }
-
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            Log.i("ACCELEROMETER", "IS WORKINNN");
+            Intent intent = new Intent(this, CongressionalViewActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Log.i("WATCHLISTENER", "92123");
+//            intent.putStringArrayListExtra("REGION_REPS", message_array);
+            intent.putExtra("LOCATION", "92123");
+            startActivity(intent);
+        }
     }
 }

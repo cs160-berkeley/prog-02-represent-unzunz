@@ -32,12 +32,6 @@ public class CongressionalViewActivity extends AppCompatActivity {
         ArrayList<String> rep_tweets = intent.getStringArrayListExtra("TWEETS");
         ArrayList<String> presidential_results = intent.getStringArrayListExtra("REPRESENTATIVES");
 
-        Log.i("SIZES: ", Integer.toString(rep_names.size()));
-        Log.i("SIZES: ", Integer.toString(rep_parties.size()));
-        Log.i("SIZES: ", Integer.toString(rep_emails.size()));
-        Log.i("SIZES: ", Integer.toString(rep_webs.size()));
-        Log.i("SIZES: ", Integer.toString(rep_tweets.size()));
-
         LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
 
 
@@ -51,7 +45,7 @@ public class CongressionalViewActivity extends AppCompatActivity {
                 TextView webView = (TextView) view.findViewById(R.id.rep_web);
                 TextView tweetView = (TextView) view.findViewById(R.id.rep_tweet);
 
-                nameView.setText(rep_names.get(index));
+                nameView.setText(rep_names.get(index) + rep_parties.get(index));
                 emailView.setText(rep_emails.get(index));
                 tweetView.setText(rep_tweets.get(index));
                 webView.setText(rep_webs.get(index));
