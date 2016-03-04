@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,63 +30,61 @@ public class CongressionalViewActivity extends FragmentActivity {
         setContentView(R.layout.activity_congressional_view);
 
         Intent intent = getIntent();
-        ArrayList<String> extras = intent.getStringArrayListExtra("REGION_REPS");
+//        ArrayList<String> extras = intent.getStringArrayListExtra("REGION_REPS");
+        Bundle extras = intent.getExtras();
+        String location = extras.getString("LOCATION");
 
-//        LinearLayout hello = (LinearLayout) findViewById(R.id.watch_congressional);
-//        mTextView = (TextView) findViewById(R.id.reps_output);
-//        mTextView.setText("WHYS IS THIS NOT WORKIGN HELLO SLKDFJSLKDJF BYSDFLKSDF???? WHY IS DIS NOT NOT WORKI?SDFSDF?");
-//        Log.i("We in here", mTextView.getText().toString());
-
-//        Log.i("EXTRAS? ", Integer.toString(extras.size()));
 
         final DotsPageIndicator mPageIndicator;
         final GridViewPager mViewPager;
 
-        final String[][] rep_names = {
-            { "Barbara Lee", "Jerry McNerney", "Loni Hancock" },
-            { "Obama - 59.3%"}
-        };
-
-        final String[][] rep_parties = {
-            { "Democrat", "Democrat", "Democratic" },
-            { "Romney - 38.3%"}
-        };
 
         // Get UI references
         mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         mViewPager = (GridViewPager) findViewById(R.id.pager);
 
-        // Assigns an adapter to provide the content for this pager
-        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties));
-        mPageIndicator.setPager(mViewPager);
 
-
-//        if (extras != null) {
-//            for (String member : extras) {
-////                Log.i("MEMBER: ", member);
-//                TextView new_rep = new TextView(this);
-//                new_rep.setText(member);
-//                RepOnClickListener click_listener = new RepOnClickListener();
-//                click_listener.setRepName(member);
-//                new_rep.setOnClickListener(click_listener);
-//                hello.addView(new_rep);
-//            }
-//        }
+        if (location.equals("94704")) {
+            String[][] rep_names = {
+                    {"Barbara Lee", "Jerry McNerney", "Loni Hancock"},
+                    {"Obama - 59.3%"}
+            };
+            String[][] rep_parties = {
+                    {"Democratic", "Democratic", "Democratic"},
+                    {"Romney - 38.3%"}
+            };
+            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
+            mPageIndicator.setPager(mViewPager);
+        } else {
+            String[][] rep_names = {
+                    {"Duncan L. Hunter", "Duncan D. Hunter", "Scott Peters"},
+                    {"Obama - 52.6%"}
+            };
+            String[][] rep_parties = {
+                    {"Republican", "Republican", "Democratic"},
+                    {"Romney - 45%"}
+            };
+            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
+            mPageIndicator.setPager(mViewPager);
+        }
     }
     private static final class GridPagerAdapter extends FragmentGridPagerAdapter {
 
         String[][] repNames;
         String[][] repParties;
+        String location;
 
-        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties) {
+        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties, String location) {
             super(fm);
             repNames = rep_names;
             repParties = rep_parties;
+            this.location = location;
         }
+
 
         @Override
         public Fragment getFragment(int row, int column) {
-            return (CardFragment.create(repNames[row][column], repParties[row][column]));
+            return CardFragment.create(repNames[row][column], location + ": " + repParties[row][column]);
         }
 
         @Override
@@ -98,26 +97,5 @@ public class CongressionalViewActivity extends FragmentActivity {
             return repNames[row].length;
         }
     }
-
-    public class RepOnClickListener implements View.OnClickListener {
-        String rep_name;
-
-        public void setRepName(String name) {
-            this.rep_name = name;
-        }
-
-        @Override
-        public void onClick(View view) {
-            retrieveDetails(rep_name);
-        }
-    }
-
-    public void retrieveDetails(String rep_name) {
-        Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
-        sendIntent.putExtra("SELECTED_REP", rep_name);
-        startService(sendIntent);
-    };
-
-
 
 }

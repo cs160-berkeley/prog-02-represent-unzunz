@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     String location_string = location_input.getText().toString();
+                    Log.i("LOCATION: ", location_string);
                     retrieveReps(location_string);
                     return true;
                 }
@@ -49,26 +50,108 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public ArrayList<String> retrieveRepsAPI() {
-        ArrayList<String> representatives = new ArrayList<>();
-        representatives.add("Barbara Lee");
-        representatives.add("Barbara Lee");
-        return representatives;
+    public ArrayList<String> retrieveRepNames(String location) {
+        ArrayList<String> reps = new ArrayList<>();
+        if (location.equals("94704")) {
+            reps.add("Barbara Lee");
+            reps.add("Jerry McNerney");
+            reps.add("Loni Hancock");
+        } else {
+            reps.add("Duncan L. Hunter");
+            reps.add("Ducnan D. Hunter");
+            reps.add("Scott Peters");
+        }
+        return reps;
     }
 
+    public ArrayList<String> retrieveRepParties(String location) {
+        ArrayList<String> parties = new ArrayList<>();
+        if (location.equals("94704")) {
+            parties.add("D");
+            parties.add("D");
+            parties.add("D");
+        } else {
+            parties.add("R");
+            parties.add("R");
+            parties.add("D");
+        }
+        return parties;
+    }
+
+    public ArrayList<String> retrievePresResults(String location) {
+        ArrayList<String> results = new ArrayList<>();
+        if (location.equals("94704")) {
+            results.add("94794");
+            results.add("59.3%");
+            results.add("38.3%");
+        } else {
+            results.add("92123");
+            results.add("52.6");
+            results.add("45.0");
+        }
+        return results;
+    }
+
+    public ArrayList<String> retrieveRepEmails(String location) {
+        ArrayList<String> emails = new ArrayList<>();
+        if (location.equals("94704")) {
+            emails.add("barbs@gmail.com");
+            emails.add("jerry@gmail.com");
+            emails.add("loni@gmail.com");
+        } else {
+            emails.add("duncanl@gmail.com");
+            emails.add("duncand@gmail.com");
+            emails.add("scottpeters@gmail.com");
+        }
+        return emails;
+    }
+
+    public ArrayList<String> retrieveRepWebs(String location) {
+        ArrayList<String> webs = new ArrayList<>();
+        if (location.equals("94704")) {
+            webs.add("http://lee.house.gov");
+            webs.add("http://mcnerney.house.gov");
+            webs.add("http://hancock.house.gov");
+        } else {
+            webs.add("http://duncanl.house.gov");
+            webs.add("http://duncand.house.gov");
+            webs.add("http://scottpeters.house.gov");
+        }
+        return webs;
+    }
+
+    public ArrayList<String> retrieveRepTweets(String location) {
+        ArrayList<String> tweets = new ArrayList<>();
+        tweets.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+        tweets.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+        tweets.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+        return tweets;
+    }
     public void retrieveReps(String location) {
-        TextView sampleView = (TextView) findViewById(R.id.dundun);
-        sampleView.setText(location);
+        ArrayList<String> rep_names = retrieveRepNames(location);
+        ArrayList<String> rep_parties = retrieveRepParties(location);
+        ArrayList<String> rep_emails = retrieveRepEmails(location);
+        ArrayList<String> rep_webs = retrieveRepWebs(location);
+        ArrayList<String> rep_tweets = retrieveRepTweets(location);
+        ArrayList<String> presidential_results = retrievePresResults(location);
 
-        ArrayList<String> representatives = retrieveRepsAPI();
 
-        Intent congressionalIntent = new Intent(this, CongressionalViewActivity.class);
-        congressionalIntent.putStringArrayListExtra("REPRESENTATIVES", representatives);
-        startActivity(congressionalIntent);
 
-        Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
-        sendIntent.putStringArrayListExtra("REPRESENTATIVES", representatives);
-        startService(sendIntent);
+        Intent toCongressional = new Intent(this, CongressionalViewActivity.class);
+        toCongressional.putStringArrayListExtra("REPRESENTATIVES", rep_names);
+        toCongressional.putStringArrayListExtra("PARTIES", rep_parties);
+        toCongressional.putStringArrayListExtra("EMAILS", rep_emails);
+        toCongressional.putStringArrayListExtra("WEBS", rep_webs);
+        toCongressional.putStringArrayListExtra("TWEETS", rep_tweets);
+        toCongressional.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
+        startActivity(toCongressional);
+
+        Intent toWatch = new Intent(getBaseContext(), PhoneToWatchService.class);
+//        toWatch.putStringArrayListExtra("REPRESENTATIVES", rep_names);
+//        toWatch.putStringArrayListExtra("PARTIES", rep_parties);
+//        toWatch.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
+        toWatch.putExtra("LOCATION", location);
+        startService(toWatch);
     }
 
     @Override
