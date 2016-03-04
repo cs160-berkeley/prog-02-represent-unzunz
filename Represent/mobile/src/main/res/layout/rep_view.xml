@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5dp"
             android:text="Barbara Lee"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:color="#FFFFFF"
             android:id="@+id/rep_name" />
         <TextView

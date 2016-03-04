@@ -53,7 +53,7 @@ public class CongressionalViewActivity extends FragmentActivity {
                     {"Democratic", "Democratic", "Democratic"},
                     {"Romney - 38.3%"}
             };
-            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties));
+            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
             mPageIndicator.setPager(mViewPager);
         } else {
             String[][] rep_names = {
@@ -64,7 +64,7 @@ public class CongressionalViewActivity extends FragmentActivity {
                     {"Republican", "Republican", "Democratic"},
                     {"Romney - 45%"}
             };
-            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties));
+            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
             mPageIndicator.setPager(mViewPager);
         }
     }
@@ -72,18 +72,19 @@ public class CongressionalViewActivity extends FragmentActivity {
 
         String[][] repNames;
         String[][] repParties;
+        String location;
 
-        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties) {
+        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties, String location) {
             super(fm);
             repNames = rep_names;
             repParties = rep_parties;
+            this.location = location;
         }
 
 
         @Override
         public Fragment getFragment(int row, int column) {
-            Log.i("Hi", "ho");
-            return CardFragment.create(repNames[row][column], repParties[row][column]);
+            return CardFragment.create(repNames[row][column], location + ": " + repParties[row][column]);
         }
 
         @Override
@@ -96,23 +97,5 @@ public class CongressionalViewActivity extends FragmentActivity {
             return repNames[row].length;
         }
     }
-//
-//    public class RepOnClickListener implements View.OnClickListener {
-//        String rep_name;
-//
-//        public void setRepName(String name) {
-//            this.rep_name = name;
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            retrieveDetails(rep_name);
-//        }
-//    }
-//
-//    public void retrieveDetails(String rep_name) {
-//        Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
-//        sendIntent.putExtra("SELECTED_REP", rep_name);
-//        startService(sendIntent);
-//    };
+
 }

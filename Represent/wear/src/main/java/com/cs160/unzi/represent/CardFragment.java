@@ -314,7 +314,6 @@ public class CardFragment extends Fragment {
                 title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, args.getInt("CardFragment_icon"), 0);
             }
         }
-        Log.i("HELLO SUCKERS", "HSDFLKJ");
         view.setOnClickListener(new RepOnClickListener(args.getCharSequence("CardFragment_title").toString()));
 
         return view;
@@ -332,7 +331,6 @@ public class CardFragment extends Fragment {
             Intent sendIntent = new Intent(getActivity(), WatchToPhoneService.class);
             sendIntent.putExtra("SELECTED_REP", rep_name);
             getActivity().startService(sendIntent);
-            Log.i("TOUCHINGSLKFJ", "TOUHCHCHCH");
         }
     }
 }
