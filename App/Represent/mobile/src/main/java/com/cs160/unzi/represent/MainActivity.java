@@ -1,12 +1,14 @@
 package com.cs160.unzi.represent;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,23 +19,47 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+//public class MainActivity extends ActionBarActivity implements
+//        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
 
     private EditText location_input;
     public final static String REPRESENTATIVES = "com.represent.REPRESENTATIVES";
+    private Location CURRENT_LOCATION = null;
+    private String mLatitudeText = null;
+    private String mLongitudeText = null;
+    private GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (mGoogleApiClient == null) {
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+//                        @Override
+//                        public void onConnected(Bundle connectionHint) {
+//                        }
+//                        @Override
+//                        public void onConnectionSuspended(int cause) {
+//                        }
+//                    })
+//                    .addApi(LocationServices.API)
+//                    .build();
+//            mGoogleApiClient.connect();
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         location_input = (EditText) findViewById(R.id.location_input);
         location_input.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
@@ -50,6 +76,54 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i("Retriving: ", "LOCATION??");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            CURRENT_LOCATION = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+//            TextView mLatitudeText = (TextView) findViewById(R.id.latitude);
+//            TextView mLongitudeText = (TextView) findViewById(R.id.longitude);
+//            mLatitudeText.setText(String.valueOf(CURRENT_LOCATION.getLatitude()));
+//            mLongitudeText.setText(String.valueOf(CURRENT_LOCATION.getLongitude()));
+            Log.i("GOGSDF: ", String.valueOf(mGoogleApiClient));
+            Log.i("HELLO: ", String.valueOf(CURRENT_LOCATION));
+//            Log.i("LATITUDE", String.valueOf(CURRENT_LOCATION.getLatitude()));
+//            Log.i("LONGITUDE", String.valueOf(CURRENT_LOCATION.getLongitude()));
+        } else {
+            // Show rationale and request permission.
+            Log.i("FOUND", "NOTHING");
+        }
+
+        if (CURRENT_LOCATION != null) {
+            Log.i("LATITUDE", String.valueOf(CURRENT_LOCATION.getLatitude()));
+            Log.i("LONGITUDE", String.valueOf(CURRENT_LOCATION.getLongitude()));
+        }
+    }
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
     public ArrayList<String> retrieveRepNames(String location) {
         ArrayList<String> reps = new ArrayList<>();
         if (location.equals("94704")) {
@@ -63,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return reps;
     }
+
 
     public ArrayList<String> retrieveRepParties(String location) {
         ArrayList<String> parties = new ArrayList<>();
@@ -134,8 +209,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> rep_webs = retrieveRepWebs(location);
         ArrayList<String> rep_tweets = retrieveRepTweets(location);
         ArrayList<String> presidential_results = retrievePresResults(location);
-
-
 
         Intent toCongressional = new Intent(this, CongressionalViewActivity.class);
         toCongressional.putStringArrayListExtra("REPRESENTATIVES", rep_names);
