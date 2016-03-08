@@ -100,47 +100,23 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
                     mGoogleApiClient);
 
         } else {
-            // Show rationale and request permission.
             Log.i("FOUND", "NOTHING");
         }
 
         if (CURRENT_LOCATION != null) {
-
-//            Log.i("LATITUDE: ", String.valueOf(CURRENT_LOCATION.getLatitude()));
-//            Log.i("LONGITUDE: ", String.valueOf(CURRENT_LOCATION.getLongitude()));
             LatLng location_input = new LatLng(CURRENT_LOCATION.getLatitude(), CURRENT_LOCATION.getLongitude());
-//            LatLng location_input = new LatLng(37.8714542, -122.2727461);
-//
-
-
             GeocodingApiRequest req = GeocodingApi.reverseGeocode(mGeoContext, location_input);
-
             req.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
                 @Override
                 public void onResult(GeocodingResult[] result) {
-                    // Handle successful request.
                                     Log.i("wtf: ", result[0].formattedAddress);
                 }
 
                 @Override
                 public void onFailure(Throwable e) {
-                    // Handle error.
-                                    Log.i("darn", e.getMessage()
-                                    );
+                    Log.i("darn", e.getMessage());
                 }
             });
-
-//            try {
-//                GeocodingResult[] results = GeocodingApi.newRequest(mGeoContext)
-//                        .latlng(new LatLng(-33.8674869, 151.2069902)).await();
-//                Log.i("wtf: ", results[0].formattedAddress);
-//                Log.i("hello", "hi");
-//                // Handle successful request.
-//            } catch (Exception e) {
-//                Log.i("darn", "poop");
-//                // Handle error
-//            }
-//            results.awaitIgnoreError(); // No checked exception.
         }
     }
 
