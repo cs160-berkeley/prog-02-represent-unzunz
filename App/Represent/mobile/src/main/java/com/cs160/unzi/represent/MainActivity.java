@@ -30,7 +30,11 @@ import com.google.maps.PendingResult;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 //public class MainActivity extends ActionBarActivity implements
@@ -53,6 +57,13 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            Log.i("HELLO?", "WHY NOT");
+            printCongressmen();
+        } catch (IOException e) {
+
+        }
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -60,23 +71,23 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
                     .addApi(LocationServices.API)
                     .build();
         }
-
         mGeoContext = new GeoApiContext().setApiKey(GEOCODE_KEY);
-
 
         location_input = (EditText) findViewById(R.id.location_input);
         location_input.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
         location_input.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    String location_string = location_input.getText().toString();
-                    Log.i("LOCATION: ", location_string);
-                    retrieveReps(location_string);
-                    return true;
-                }
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                String location_string = location_input.getText().toString();
+                Log.i("LOCATION: ", location_string);
+                retrieveReps(location_string);
+                return true;
+            }
                 return false;
             }
         });
+
+
     }
 
     protected void onStart() {
@@ -89,40 +100,51 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
         super.onStop();
     }
 
+    public void printCongressmen() throws IOException {
+        Log.i("HELLO", "CALL ME PLS");
+        String sunlight_key = "946f65d6df5c4ae2b5f9ddb58fd867f5";
+        String url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=94704&apikey=" + sunlight_key;
+        Log.i("HELLO", "GOODBYE");
+        new RetrieveRepresentatives().execute(url_string);
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i("Retriving: ", "LOCATION??");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            CURRENT_LOCATION = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-
-        } else {
-            Log.i("FOUND", "NOTHING");
-        }
-
-        if (CURRENT_LOCATION != null) {
-            LatLng location_input = new LatLng(CURRENT_LOCATION.getLatitude(), CURRENT_LOCATION.getLongitude());
-            GeocodingApiRequest req = GeocodingApi.reverseGeocode(mGeoContext, location_input);
-            req.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
-                @Override
-                public void onResult(GeocodingResult[] result) {
-                                    Log.i("wtf: ", result[0].formattedAddress);
-                }
-
-                @Override
-                public void onFailure(Throwable e) {
-                    Log.i("darn", e.getMessage());
-                }
-            });
-        }
+//        Log.i("Retriving: ", "LOCATION??");
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED
+//                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            CURRENT_LOCATION = LocationServices.FusedLocationApi.getLastLocation(
+//                    mGoogleApiClient);
+//
+//        } else {
+//            Log.i("FOUND", "NOTHING");
+//        }
+//
+//        if (CURRENT_LOCATION != null) {
+//            LatLng location_input = new LatLng(CURRENT_LOCATION.getLatitude(), CURRENT_LOCATION.getLongitude());
+//            Log.i("LATITUDE", String.valueOf(CURRENT_LOCATION.getLatitude()));
+//            Log.i("LONGITUDE", String.valueOf(CURRENT_LOCATION.getLongitude()));
+//            GeocodingApiRequest req = GeocodingApi.reverseGeocode(mGeoContext, location_input);
+//            req.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
+//                @Override
+//                public void onResult(GeocodingResult[] result) {
+//                    Log.i("COUNTY: ", result[0].addressComponents[3].longName);
+//                }
+//
+//                @Override
+//                public void onFailure(Throwable e) {
+//                    Log.i("darn", e.getMessage());
+//                }
+//            });
+//        }
     }
 
 
     @Override
-    public void onConnectionSuspended(int i) {
+    public
+    void onConnectionSuspended(int i) {
 
     }
 
