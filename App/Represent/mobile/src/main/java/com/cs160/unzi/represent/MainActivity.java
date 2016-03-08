@@ -3,6 +3,7 @@ package com.cs160.unzi.represent;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +21,14 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
 import com.google.android.gms.wearable.Wearable;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.GeocodingApiRequest;
+import com.google.maps.PendingResult;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -30,11 +38,15 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
 
 
     private EditText location_input;
-    public final static String REPRESENTATIVES = "com.represent.REPRESENTATIVES";
+    private final static String REPRESENTATIVES = "com.represent.REPRESENTATIVES";
+//    private final static String URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+    private final static String GEOCODE_KEY = "AIzaSyC-dGcJdgGc7KZzPBTFlH0dOMJtdyYxjHE";
+
     private Location CURRENT_LOCATION = null;
     private String mLatitudeText = null;
     private String mLongitudeText = null;
     private GoogleApiClient mGoogleApiClient;
+    private GeoApiContext mGeoContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +54,15 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
         setContentView(R.layout.activity_main);
 
         if (mGoogleApiClient == null) {
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-//                        @Override
-//                        public void onConnected(Bundle connectionHint) {
-//                        }
-//                        @Override
-//                        public void onConnectionSuspended(int cause) {
-//                        }
-//                    })
-//                    .addApi(LocationServices.API)
-//                    .build();
-//            mGoogleApiClient.connect();
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        mGeoContext = new GeoApiContext().setApiKey(GEOCODE_KEY);
+
 
         location_input = (EditText) findViewById(R.id.location_input);
         location_input.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
@@ -95,24 +98,53 @@ public class MainActivity extends ActionBarActivity  implements GoogleApiClient.
                 == PackageManager.PERMISSION_GRANTED) {
             CURRENT_LOCATION = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
-//            TextView mLatitudeText = (TextView) findViewById(R.id.latitude);
-//            TextView mLongitudeText = (TextView) findViewById(R.id.longitude);
-//            mLatitudeText.setText(String.valueOf(CURRENT_LOCATION.getLatitude()));
-//            mLongitudeText.setText(String.valueOf(CURRENT_LOCATION.getLongitude()));
-            Log.i("GOGSDF: ", String.valueOf(mGoogleApiClient));
-            Log.i("HELLO: ", String.valueOf(CURRENT_LOCATION));
-//            Log.i("LATITUDE", String.valueOf(CURRENT_LOCATION.getLatitude()));
-//            Log.i("LONGITUDE", String.valueOf(CURRENT_LOCATION.getLongitude()));
+
         } else {
             // Show rationale and request permission.
             Log.i("FOUND", "NOTHING");
         }
 
         if (CURRENT_LOCATION != null) {
-            Log.i("LATITUDE", String.valueOf(CURRENT_LOCATION.getLatitude()));
-            Log.i("LONGITUDE", String.valueOf(CURRENT_LOCATION.getLongitude()));
+
+//            Log.i("LATITUDE: ", String.valueOf(CURRENT_LOCATION.getLatitude()));
+//            Log.i("LONGITUDE: ", String.valueOf(CURRENT_LOCATION.getLongitude()));
+            LatLng location_input = new LatLng(CURRENT_LOCATION.getLatitude(), CURRENT_LOCATION.getLongitude());
+//            LatLng location_input = new LatLng(37.8714542, -122.2727461);
+//
+
+
+            GeocodingApiRequest req = GeocodingApi.reverseGeocode(mGeoContext, location_input);
+
+            req.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
+                @Override
+                public void onResult(GeocodingResult[] result) {
+                    // Handle successful request.
+                                    Log.i("wtf: ", result[0].formattedAddress);
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    // Handle error.
+                                    Log.i("darn", e.getMessage()
+                                    );
+                }
+            });
+
+//            try {
+//                GeocodingResult[] results = GeocodingApi.newRequest(mGeoContext)
+//                        .latlng(new LatLng(-33.8674869, 151.2069902)).await();
+//                Log.i("wtf: ", results[0].formattedAddress);
+//                Log.i("hello", "hi");
+//                // Handle successful request.
+//            } catch (Exception e) {
+//                Log.i("darn", "poop");
+//                // Handle error
+//            }
+//            results.awaitIgnoreError(); // No checked exception.
         }
     }
+
+
     @Override
     public void onConnectionSuspended(int i) {
 
