@@ -1,5 +1,6 @@
 package com.cs160.unzi.represent;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -7,10 +8,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -23,7 +28,7 @@ public class JSONparser {
     private static StringBuilder result;
 
     public static JSONObject makeHttpRequest(String url) {
-        try {
+        try {Log.i("HELLO", "HOHOHO");
             URL sunlight_url = new URL(url);
 
             sunlightConnection = (HttpsURLConnection) sunlight_url.openConnection();
@@ -59,4 +64,5 @@ public class JSONparser {
 
         return null;
     }
+
 }

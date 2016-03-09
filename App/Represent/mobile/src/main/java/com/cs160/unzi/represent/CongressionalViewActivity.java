@@ -1,5 +1,6 @@
 package com.cs160.unzi.represent;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +16,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.User;
+
 import java.util.ArrayList;
 
+
 public class CongressionalViewActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_congressional_view);
+
 
         Intent intent = getIntent();
         ArrayList<String> rep_names = intent.getStringArrayListExtra("REPRESENTATIVES");
@@ -60,6 +73,7 @@ public class CongressionalViewActivity extends AppCompatActivity {
             }
         }
     }
+
 
     public class RepOnClickListener implements OnClickListener {
         String rep_name;

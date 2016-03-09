@@ -24,6 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
+        Log.i("HELLO", "HI");
         JSONObject reps_info = JSONparser.makeHttpRequest(urls[0]);
         ArrayList<HashMap<String, String>> reps_list = new ArrayList<HashMap<String, String>>();
         try {

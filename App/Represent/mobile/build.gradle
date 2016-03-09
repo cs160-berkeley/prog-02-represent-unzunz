@@ -19,8 +19,24 @@ android {
     }
 }
 
+
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // The Fabric Gradle plugin uses an open ended version to react
+        // quickly to Android tooling updates
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+apply plugin: 'io.fabric'
+
 repositories {
     mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 
@@ -28,10 +44,17 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     testCompile 'junit:junit:4.12'
+    //    compile 'com.google.android.gms:play-services:8.4.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
+    compile('com.twitter.sdk.android:twitter:1.13.0@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:appcompat-v7:23.2.0'
-//    compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-wearable:8.4.0'
     compile 'com.android.support:design:23.2.0'
     compile 'com.google.maps:google-maps-services:0.1.10'
+    compile 'com.android.support:support-v4:23.2.0'
 }
