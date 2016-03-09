@@ -32,7 +32,7 @@ public class RetrieveTweets extends AsyncTask<String, Void, ArrayList<HashMap<St
         try {
             String bearer_token = TwitterLoginActivity.requestBearerToken();
 //            URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=oonzunz&count=2");
-            URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?count=2&screen_name=RepBarbaraLee");
+            URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?count=1&screen_name=RepBarbaraLee");
             twitterConnection = (HttpsURLConnection) user_url.openConnection();
             twitterConnection.setRequestMethod("GET");
             twitterConnection.setRequestProperty("Host", "api.twitter.com");
@@ -58,7 +58,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, ArrayList<HashMap<St
             result = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                Log.i("LINE", line);
                 result.append(line);
             }
         } catch (IOException e) {
@@ -69,7 +68,16 @@ public class RetrieveTweets extends AsyncTask<String, Void, ArrayList<HashMap<St
 
         try {
             JSONArray json_object = new JSONArray(result.toString());
-            Log.i("JSON", json_object.toString());
+            JSONObject object_0 = json_object.getJSONObject(0);
+            JSONObject user = (JSONObject) object_0.get("user");
+            String image_url = user.get("profile_image_url").toString();
+            String text = object_0.get("text").toString();
+            Log.i("FIELDs", object_0.names().toString());
+            Log.i("TEXT", text);
+            Log.i("IMage", image_url);
+
+//            Log.i("IMAGE: ", image_url);
+//            Log.i("JSON", String.valueOf(json_object.length()));
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
