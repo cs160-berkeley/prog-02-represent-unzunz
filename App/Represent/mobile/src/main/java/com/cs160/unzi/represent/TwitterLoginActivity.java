@@ -154,6 +154,8 @@ public class TwitterLoginActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        twitterConnection.disconnect();
         try {
             JSONObject json_object = new JSONObject(result.toString());
             String tokenType = (String) json_object.get("token_type");
