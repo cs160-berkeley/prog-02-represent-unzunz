@@ -34,6 +34,9 @@ public class CongressionalViewActivity extends AppCompatActivity {
 //    private HashMap<String, String> twitterIds = new HashMap<String, String>();
 //    private HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
 //    private HashMap<String, String> repPictures = new HashMap<String, String>();
+    private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
+    private HashMap<String, String> repsId = new HashMap<String, String>();
+    private HashMap<String, String> repsEndTerm = new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,44 +45,19 @@ public class CongressionalViewActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> repsInfo = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("repsInfo");
         HashMap<String, String> mostRecentTweets = (HashMap<String, String>) getIntent().getSerializableExtra("recentTweets");
         HashMap<String, String> repPictures = (HashMap<String, String>) getIntent().getSerializableExtra("repPictures");
-
-        Log.i("WE HEREEE", repsInfo.toString());
-        Log.i("WE HEREEE", mostRecentTweets.toString());
-        Log.i("WE HEREEE", repPictures.toString());
-//        Intent intent = getIntent();
-//        ArrayList<String> rep_names = intent.getStringArrayListExtra("REPRESENTATIVES");
-//        ArrayList<String> rep_parties = intent.getStringArrayListExtra("PARTIES");
-//        ArrayList<String> rep_emails = intent.getStringArrayListExtra("EMAILS");
-//        ArrayList<String> rep_webs = intent.getStringArrayListExtra("WEBS");
-//        ArrayList<String> rep_tweets = intent.getStringArrayListExtra("TWEETS");
-//        ArrayList<String> presidential_results = intent.getStringArrayListExtra("REPRESENTATIVES");
-
-
-//        String full_name;
-//        for (HashMap<String, String> rep : reps_info) {
-//            full_name = rep.get("first_name") + " " + rep.get("last_name");
-//            mostRecentTweets.put(full_name, "");
-//            repPictures.put(full_name, "");
-//            twitterIds.put(full_name, rep.get("twitter_id"));
-//        }
-//        if (!twitterIds.isEmpty()) {
-//            RetrieveTweets.AsyncResponse async_response = new RetrieveTweets.AsyncResponse() {
-//                @Override
-//                public void processFinish(ArrayList<HashMap<String, String>> output) {
-//                    mostRecentTweets = output.get(0);
-//                    Log.i("TWEETS", mostRecentTweets.keySet().toString());
-//                    repPictures = output.get(1);
-//                }
-//            };
-//            RetrieveTweets tweetsAsync = new RetrieveTweets(async_response, bearerToken, twitterIds, mostRecentTweets, repPictures);
-//            tweetsAsync.execute();
-//        }
+//
+//        Log.i("WE HEREEE", repsInfo.toString());
+//        Log.i("WE HEREEE", mostRecentTweets.toString());
+//        Log.i("WE HEREEE", repPictures.toString());
 
         LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
         String full_name;
         if (repsInfo != null) {
             for (HashMap<String, String> rep : repsInfo) {
                 full_name = rep.get("first_name") + " " + rep.get("last_name");
+                repsId.put(full_name, rep.get("bioguide_id"));
+                repsEndTerm.put(full_name, rep.get("term_end"));
+
                 View view = getLayoutInflater().inflate(R.layout.rep_view, congressionalLayout, false);
                 TextView nameView = (TextView) view.findViewById(R.id.rep_name);
                 TextView emailView = (TextView) view.findViewById(R.id.rep_email);
@@ -101,23 +79,22 @@ public class CongressionalViewActivity extends AppCompatActivity {
 
 
     public class RepOnClickListener implements OnClickListener {
-        String rep_name;
-
-        public void setRepName(String name) {
-            this.rep_name = name;
+        String repName;
+        public void setRepName(String rep_name) {
+            this.repName = rep_name;
         }
 
         @Override
         public void onClick(View view) {
-            retrieveDetails(rep_name);
+            retrieveDetails(repName);
         }
     }
 
-    public void retrieveDetails(String rep_name) {
-//        Intent intent = new Intent(this, DetailedViewActivity.class);
-//        intent.putExtra("SELECTED_REP", rep_name);
-//        startActivity(intent);
+    public void retrieveDetails(String repName) {
+        String rep_id = repsId.get(repName);
+        String end_term = repsEndTerm.get(repName);
+        String bill_url = "https://congress.api.sunlightfoundation.com/bills?sponsor_id=" + rep_id + "&apikey=" + sunlightKey;
+        String committee_url = "https://congress.api.sunlightfoundation.com/committees?member_ids=" + rep_id + "&apikey=" + sunlightKey;
+        new RetrieveRepDetails(this.getBaseContext(), repName, end_term).execute(bill_url, committee_url);
     };
-
-
 }

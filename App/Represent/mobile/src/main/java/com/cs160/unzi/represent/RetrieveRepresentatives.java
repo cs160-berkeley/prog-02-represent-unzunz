@@ -51,7 +51,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
                 rep_info.put("website", rep_json.get("website").toString());
                 rep_info.put("term_end", rep_json.get("term_end").toString());
                 rep_info.put("twitter_id", rep_json.get("twitter_id").toString());
-                Log.i("twitter_id", rep_json.get("twitter_id").toString());
+                rep_info.put("term_end", rep_json.get("term_end").toString());
                 reps_list.add(rep_info);
             }
         } catch (JSONException e) {
@@ -72,7 +72,6 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             mostRecentTweets.put(full_name, "");
             repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
-            Log.i("TWITTER:", rep.get("twitter_id"));
         }
         if (!twitterIds.isEmpty()) {
             RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds, mostRecentTweets, repPictures, reps_info);
