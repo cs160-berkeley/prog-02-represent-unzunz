@@ -23,6 +23,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,32 +60,51 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.i("hello", "please");
         for (DataEvent event : dataEvents) {
-
-            Log.i("[DEBUG]", event.getDataItem().getUri().toString());
-
             String eventUri = event.getDataItem().getUri().toString();
-            Log.i("WTF", "UG?????H");
-            if (eventUri.contains("/myapp/myevent")) {
-                Log.i("WTF", "UGH");
+            if (eventUri.contains("/watchContent")) {
                 DataMapItem dataItem = DataMapItem.fromDataItem(event.getDataItem());
-
                 DataMap dataMap = dataItem.getDataMap();
-//                String[] data = dataItem.getDataMap().getStringArray("contents");
 
-                HashMap<String, String[]> hashMap = new HashMap<String, String[]>();
+                HashMap<String, String[]> watchContent = new HashMap<String, String[]>();
                 for (String key : dataMap.keySet()) {
-                    hashMap.put(key, dataMap.getStringArray(key));
+                    watchContent.put(key, dataMap.getStringArray(key));
                     Log.i("KEY", key);
                     Log.i("Value", dataMap.getStringArray(key).toString());
                 }
-                Log.i("IDKSF", "Dasdfasdf");
-
-//                myListener.onDataReceived(data);
+                if (!watchContent.isEmpty()) {
+                    setupGrid(watchContent);
+                }
             }
 
         }
+    }
+
+    private void setupGrid(HashMap<String, String[]> watch_content) {
+        int size = watch_content.size();
+        String[][] rep_names = new String[2][size];
+        String[][] rep_parties = new String[2][size];
+        String[][] rep_images = new String[2][size];
+
+        int index = 0;
+        for (String key : watch_content.keySet()) {
+            rep_names[0][index] = key;
+            rep_parties[0][index] = watch_content.get(key)[0];
+            rep_images[0][index] = watch_content.get(key)[1];
+            index++;
+        }
+
+        rep_names[1][0] = "California";
+        rep_parties[1][0] = "Obama - 52.6%";
+        rep_images[1][0] = "Romney - 45%";
+
+        Intent intent = new Intent(this, CongressionalViewActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("repNames", rep_names);
+        intent.putExtra("repParties", rep_parties);
+        intent.putExtra("repImages", rep_images);
+
+        startActivity(intent);
     }
 
     @Override

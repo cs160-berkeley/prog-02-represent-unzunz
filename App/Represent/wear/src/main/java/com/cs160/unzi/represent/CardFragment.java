@@ -314,7 +314,7 @@ public class CardFragment extends Fragment {
                 title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, args.getInt("CardFragment_icon"), 0);
             }
         }
-        view.setOnClickListener(new RepOnClickListener(args.getCharSequence("CardFragment_title").toString()));
+//        view.setOnClickListener(new RepOnClickListener(args.getCharSequence("CardFragment_title").toString()));
 
         return view;
     }

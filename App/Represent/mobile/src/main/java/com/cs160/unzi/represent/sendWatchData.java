@@ -1,6 +1,5 @@
 package com.cs160.unzi.represent;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,23 +48,9 @@ public class sendWatchData extends Service implements GoogleApiClient.Connection
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         watchContent = (HashMap<String,  String[]>) intent.getSerializableExtra("watchContent");
-//        new DataTask(mContext, watchContent).execute();
-        Log.i("COMON", "PLES");
-        for (Map.Entry<String, String[]> entry : watchContent.entrySet()) {
-            Log.i("KEY", entry.getKey());
-            Log.i("VALUE", entry.getValue()[0]  );
-            Log.i("VALUE", entry.getValue()[1]  );
-        }
         new DataTask (mContext, watchContent).execute();
         return START_STICKY;
     }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i("watch", watchContent.toString());
-        String [] myData = new String[]{"data1", "data2", "data3"};
-    }
-
 
     class DataTask  extends AsyncTask<Node, Void, Void> {
 
@@ -80,31 +64,27 @@ public class sendWatchData extends Service implements GoogleApiClient.Connection
 
         @Override
         protected Void doInBackground(Node... nodes) {
-            Log.i("HERE", "UGH");
-            PutDataMapRequest dataMap = PutDataMapRequest.create("/myapp/myevent");
+            PutDataMapRequest dataMap = PutDataMapRequest.create("/watchContent");
 
-
-//            dataMap.getDataMap().putStringArray("contents", contents);
             for (Map.Entry<String, String[]> entry : contents.entrySet()) {
                 dataMap.getDataMap().putStringArray(entry.getKey(), entry.getValue());
             }
-            Log.i("CHECKING", dataMap.getDataMap().keySet().toString());
 
             PutDataRequest request = dataMap.asPutDataRequest();
 
             DataApi.DataItemResult dataItemResult = Wearable.DataApi
                     .putDataItem(mGoogleApiClient, request).await();
-
-
-//            Log.d("[DEBUG] SendDataCoolTask - doInBackground", "/myapp/myevent" status, "+getStatus());
-            Log.d("DEBUG", "UGH");
             return null;
         }
     }
-    
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
-
 
     }
     @Override

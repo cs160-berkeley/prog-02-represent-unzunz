@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CongressionalViewActivity extends FragmentActivity {
 
@@ -30,43 +31,45 @@ public class CongressionalViewActivity extends FragmentActivity {
         setContentView(R.layout.activity_congressional_view);
 
         Intent intent = getIntent();
-//        ArrayList<String> extras = intent.getStringArrayListExtra("REGION_REPS");
-        Bundle extras = intent.getExtras();
-        String location = extras.getString("LOCATION");
+        String[][] repNames = (String[][]) intent.getSerializableExtra("repNames");
+        String[][] repParties = (String[][]) intent.getSerializableExtra("repParties");
+        String[][] repImages = (String[][]) intent.getSerializableExtra("repImages");
 
-
-        final DotsPageIndicator mPageIndicator;
-        final GridViewPager mViewPager;
+//        final DotsPageIndicator mPageIndicator;
+//        final GridViewPager mViewPager;
 
 
         // Get UI references
-        mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
-        mViewPager = (GridViewPager) findViewById(R.id.pager);
+        DotsPageIndicator mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
+        GridViewPager mViewPager = (GridViewPager) findViewById(R.id.pager);
 
+//
+//        if (location.equals("94704")) {
+//            String[][] rep_names = {
+//                    {"Barbara Lee", "Jerry McNerney", "Loni Hancock"},
+//                    {"Obama - 59.3%"}
+//            };
+//            String[][] rep_parties = {
+//                    {"Democratic", "Democratic", "Democratic"},
+//                    {"Romney - 38.3%"}
+//            };
+//            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
+//            mPageIndicator.setPager(mViewPager);
+//        } else {
+//            String[][] rep_names = {
+//                    {"Duncan L. Hunter", "Duncan D. Hunter", "Scott Peters"},
+//                    {"Obama - 52.6%"}
+//            };
+//            String[][] rep_parties = {
+//                    {"Republican", "Republican", "Democratic"},
+//                    {"Romney - 45%"}
+//            };
+//            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
+//            mPageIndicator.setPager(mViewPager);
+//        }
 
-        if (location.equals("94704")) {
-            String[][] rep_names = {
-                    {"Barbara Lee", "Jerry McNerney", "Loni Hancock"},
-                    {"Obama - 59.3%"}
-            };
-            String[][] rep_parties = {
-                    {"Democratic", "Democratic", "Democratic"},
-                    {"Romney - 38.3%"}
-            };
-            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
-            mPageIndicator.setPager(mViewPager);
-        } else {
-            String[][] rep_names = {
-                    {"Duncan L. Hunter", "Duncan D. Hunter", "Scott Peters"},
-                    {"Obama - 52.6%"}
-            };
-            String[][] rep_parties = {
-                    {"Republican", "Republican", "Democratic"},
-                    {"Romney - 45%"}
-            };
-            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
-            mPageIndicator.setPager(mViewPager);
-        }
+        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), repNames, repParties, "94704"));
+        mPageIndicator.setPager(mViewPager);
     }
     private static final class GridPagerAdapter extends FragmentGridPagerAdapter {
 
