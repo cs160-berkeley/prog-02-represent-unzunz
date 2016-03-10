@@ -110,13 +110,12 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String something) {
-//        Intent intent = new Intent(mContext, CongressionalViewActivity.class);
-//        intent.putExtra("repsInfo", repsInfo);
-//        intent.putExtra("recentTweets", mostRecentTweets);
-//        intent.putExtra("repPictures", repPictures);
-////        intent.putExtra("BearerToken", bearerToken);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        mContext.startActivity(intent);
+        Intent intent = new Intent(mContext, CongressionalViewActivity.class);
+        intent.putExtra("repsInfo", repsInfo);
+        intent.putExtra("recentTweets", mostRecentTweets);
+        intent.putExtra("repPictures", repPictures);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
 
         Log.i("RetrieveTweets", "ok");
         Intent toWatch = new Intent(mContext, sendWatchData.class);

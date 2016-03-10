@@ -51,19 +51,21 @@ public class WatchToPhoneService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
 
-        final String repId = extras.getString("repId");
-        final String repName = extras.getString("repName");
-        final String termEnd = extras.getString("termEnd");
+        if (extras != null) {
+            final String repId = extras.getString("repId");
+            final String repName = extras.getString("repName");
+            final String termEnd = extras.getString("termEnd");
 
-        final String data = repId + "!" + repName + "!" + termEnd;
+            final String data = repId + "!" + repName + "!" + termEnd;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mWatchApiClient.connect();
-                sendMessage("/rep_info", data);
-            }
-        }).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mWatchApiClient.connect();
+                    sendMessage("/rep_info", data);
+                }
+            }).start();
+        }
         return START_STICKY;
     }
 
