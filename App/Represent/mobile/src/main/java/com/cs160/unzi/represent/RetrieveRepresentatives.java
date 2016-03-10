@@ -62,28 +62,5 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
         intent.putExtra("ArrayList", reps_info);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
-
-
-//        Intent toCongressional = new Intent(this, CongressionalViewActivity.class);
-//        toCongressional.putStringArrayListExtra("REPRESENTATIVES", rep_names);
-//        toCongressional.putStringArrayListExtra("PARTIES", rep_parties);
-//        toCongressional.putStringArrayListExtra("EMAILS", rep_emails);
-//        toCongressional.putStringArrayListExtra("WEBS", rep_webs);
-//        toCongressional.putStringArrayListExtra("TWEETS", rep_tweets);
-//        toCongressional.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
-//        startActivity(toCongressional);
-//
-//        Intent toWatch = new Intent(getBaseContext(), PhoneToWatchService.class);
-////        toWatch.putStringArrayListExtra("REPRESENTATIVES", rep_names);
-////        toWatch.putStringArrayListExtra("PARTIES", rep_parties);
-////        toWatch.putStringArrayListExtra("PRESIDENTIAL", presidential_results);
-//        toWatch.putExtra("LOCATION", location);
-//        startService(toWatch);
-
-//        if (reps_info != null) {
-//            Log.i("TWITTER: ", reps_info.get(0).get("twitter_id").toString());
-//            Log.i("TWITTER: ", reps_info.get(1).get("twitter_id").toString());
-//        }
-
     }
 }

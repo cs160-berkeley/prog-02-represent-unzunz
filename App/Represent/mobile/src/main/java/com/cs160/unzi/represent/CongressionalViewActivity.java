@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 public class CongressionalViewActivity extends AppCompatActivity {
 
+    private String bearerToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,6 @@ public class CongressionalViewActivity extends AppCompatActivity {
 
 //                tweetView.setText(rep_tweets.get(index));
                 webView.setText(rep.get("website"));
-//                webView.setText(rep_webs.get(index));
-//
 //
                 RepOnClickListener click_listener = new RepOnClickListener();
                 click_listener.setRepName("first_name" + " " + "last_name");

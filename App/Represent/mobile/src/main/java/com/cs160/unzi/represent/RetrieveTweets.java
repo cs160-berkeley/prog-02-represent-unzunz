@@ -30,7 +30,7 @@ public class RetrieveTweets extends AsyncTask<String, Void, ArrayList<HashMap<St
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
         Log.i("HELLO", "HI");
         try {
-            String bearer_token = TwitterLoginActivity.requestBearerToken();
+            String bearer_token = TwitterAuthorization.requestBearerToken();
 //            URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=oonzunz&count=2");
             URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?count=1&screen_name=RepBarbaraLee");
             twitterConnection = (HttpsURLConnection) user_url.openConnection();

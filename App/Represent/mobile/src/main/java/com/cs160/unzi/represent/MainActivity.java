@@ -35,10 +35,11 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final String GeocodeKey = "AIzaSyDIlLDoQn7rNe7OBFCUBuWRbetxuVrkomg";
+    private final String GeocodeKey = "AIzaSyBHfgizrN9qO7kO_ouKzjBsQCdGluAX168";
     private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
     private final String twitterConsumerKey = "Y2kIN6M8Z8kc0T5MZMaPPwhTx";
     private final String twitterConsumerSecret = "V9qxwhzlP1XAQX6rKjdToXoC6XA4olURktLc0PNwkTyTlRiBKq";
+    private String bearerToken = "";
 
     private final String zipCodeSearch = "search-type-zip-code";
     private final String latLongSearch = "search-type-lat-long";
@@ -50,8 +51,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Location current_location = null;
     private GoogleApiClient mGoogleApiClient;
     private GeoApiContext mGeoContext;
-    private TwitterLoginButton loginButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +67,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 //        new RetrieveTweets().execute("UGH");
 
+        RetrieveTwitterBearerToken TwitterAsyncTask =new RetrieveTwitterBearerToken(new RetrieveTwitterBearerToken.AsyncResponse() {
+            @Override
+            public void processFinish(String output) {
+                bearerToken = output;
+                Log.i("TOKEN", output);
+            }
+        });
+        TwitterAsyncTask.execute();
+
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -76,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        Log.i("hello", "where are u");
 
         mGeoContext = new GeoApiContext().setApiKey(GeocodeKey);
 
@@ -98,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     try {
                         retrieveRepresentatives(search_type);
                     } catch (IOException e) {
-                        Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR GEO", e.getMessage());
                     }
                     return true;
                 }
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 @Override
                 public void onFailure(Throwable e) {
-                    Log.i("ERROR", e.getMessage());
+                    Log.i("ERROR ONCONNECTED", e.getMessage());
                 }
             });
         }
