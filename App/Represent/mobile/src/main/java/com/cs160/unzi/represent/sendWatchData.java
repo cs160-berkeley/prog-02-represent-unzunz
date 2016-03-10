@@ -52,18 +52,18 @@ public class sendWatchData extends Service implements GoogleApiClient.Connection
         watchContent = (HashMap<String,  String[]>) intent.getSerializableExtra("watchContent");
 //        new DataTask(mContext, watchContent).execute();
         Log.i("COMON", "PLES");
-        return START_STICKY;
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i("watch", watchContent.toString());
         for (Map.Entry<String, String[]> entry : watchContent.entrySet()) {
             Log.i("KEY", entry.getKey());
             Log.i("VALUE", entry.getValue()[0]  );
             Log.i("VALUE", entry.getValue()[1]  );
         }
         new DataTask (mContext, watchContent).execute();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i("watch", watchContent.toString());
         String [] myData = new String[]{"data1", "data2", "data3"};
     }
 
