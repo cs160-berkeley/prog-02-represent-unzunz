@@ -37,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final String GeocodeKey = "AIzaSyCifyP8sNEZFA4tKYSwsgPx1ftk-1zVpxk";
+    private final String GeocodeKey = "AIzaSyDNoKsb7a8ue3TUDQ9ueCrGcVpUN9H0Ndo";
     private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
     private final String twitterConsumerKey = "Y2kIN6M8Z8kc0T5MZMaPPwhTx";
     private final String twitterConsumerSecret = "V9qxwhzlP1XAQX6rKjdToXoC6XA4olURktLc0PNwkTyTlRiBKq";
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private final String zipCodeSearch = "search-type-zip-code";
     private final String latLongSearch = "search-type-lat-long";
+    private String zipCode;
 
     private String latitude = "";
     private String longitude = "";
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .addApi(Wearable.API)
                     .build();
         }
 
@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         search_type = latLongSearch;
                     } else {
                         search_type = zipCodeSearch;
+                        zipCode = location_string;
                     }
 
                     try {
@@ -115,10 +116,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void retrieveRepresentatives(String search_type) throws IOException {
         String url_string;
         if (search_type == zipCodeSearch) {
-            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=94704&apikey=" + sunlightKey;
+            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + zipCode + "&apikey=" + sunlightKey;
         } else {
-            url_string = "congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
-                         latitude + "&longitude=" + longitude + "&apikey=946f65d6df5c4ae2b5f9ddb58fd867f5";
+//            url_string = "congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
+//                         latitude + "&longitude=" + longitude + "&apikey=" + sunlightKey;
+            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + "94704" + "&apikey=" + sunlightKey;
         }
 
         RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(new RetrieveRepresentatives.AsyncResponse(){

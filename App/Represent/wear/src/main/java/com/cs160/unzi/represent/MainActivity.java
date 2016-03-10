@@ -19,12 +19,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -66,12 +68,17 @@ public class MainActivity extends Activity implements
             if (eventUri.contains("/myapp/myevent")) {
                 Log.i("WTF", "UGH");
                 DataMapItem dataItem = DataMapItem.fromDataItem(event.getDataItem());
-                String[] data = dataItem.getDataMap().getStringArray("contents");
-                for (int i = 0; i < 2; i++ ) {
-                    Log.i("dfklajsdfkl", data[i]);
+
+                DataMap dataMap = dataItem.getDataMap();
+//                String[] data = dataItem.getDataMap().getStringArray("contents");
+
+                HashMap<String, String[]> hashMap = new HashMap<String, String[]>();
+                for (String key : dataMap.keySet()) {
+                    hashMap.put(key, dataMap.getStringArray(key));
+                    Log.i("KEY", key);
+                    Log.i("Value", dataMap.getStringArray(key).toString());
                 }
-                Log.i("OMGGG", data.toString());
-                Log.i("[DEBUG]", "DeviceService - onDataChanged");
+                Log.i("IDKSF", "Dasdfasdf");
 
 //                myListener.onDataReceived(data);
             }

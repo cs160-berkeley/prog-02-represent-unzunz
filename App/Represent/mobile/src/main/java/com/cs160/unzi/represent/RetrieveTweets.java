@@ -36,14 +36,9 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     private static HashMap<String, String> repPictures;
     private static HashMap<String, String> twitterIds;
     private static ArrayList<HashMap<String, String>> repsInfo;
-    private static HashMap<String, String> watchContent;
-//    public AsyncResponse delegate = null;
+    private static HashMap<String,String[]> watchContent;
 
-//    public interface AsyncResponse {
-//        void processFinish(ArrayList<HashMap<String, String>> output);
-//    }
-
-    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids, HashMap<String, String> most_recent_tweets, HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info, HashMap<String, String> watch_content) {
+    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids, HashMap<String, String> most_recent_tweets, HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info, HashMap<String,String[]> watch_content) {
         bearerToken = bearer_token;
         twitterIds = twitter_ids;
         mostRecentTweets = most_recent_tweets;
@@ -54,7 +49,7 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     }
 
     protected String doInBackground(String... urls) {
-
+        Log.i("RetrieveTweets", "ok>>>>");
         for (HashMap.Entry<String, String> rep : twitterIds.entrySet()) {
             try {
                 URL user_url = new URL("https://api.twitter.com/1.1/statuses/user_timeline.json?count=1&screen_name=" + rep.getValue());
@@ -98,6 +93,10 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 
                 mostRecentTweets.put(rep.getKey(), text);
                 repPictures.put(rep.getKey(), image_url);
+                String[] holder = watchContent.get(rep.getKey());
+                holder[1] = image_url;
+                watchContent.put(rep.getKey(), holder);
+
 //
 //                Log.i("FIELDs", object_0.names().toString());
 //                Log.i("TEXT", text);
@@ -118,10 +117,10 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 ////        intent.putExtra("BearerToken", bearerToken);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        mContext.startActivity(intent);
+
         Log.i("RetrieveTweets", "ok");
         Intent toWatch = new Intent(mContext, sendWatchData.class);
-//        toWatch.putExtra("repPictures", repPictures);
-//        toWatch.putExtra("watchCOntent", watchContent);
+        toWatch.putExtra("watchContent", watchContent);
 //        toWatch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startService(toWatch);
     }
