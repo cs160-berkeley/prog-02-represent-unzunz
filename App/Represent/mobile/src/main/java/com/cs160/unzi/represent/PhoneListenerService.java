@@ -12,7 +12,8 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.nio.charset.StandardCharsets;
 
 public class PhoneListenerService extends WearableListenerService {
-    private static final String DISPLAY_REP = "/display_rep";
+    private static final String DISPLAY_REP = "/rep_info";
+    private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -20,11 +21,16 @@ public class PhoneListenerService extends WearableListenerService {
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
         if (messageEvent.getPath().equalsIgnoreCase(DISPLAY_REP)) {
             String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-            Log.i("PHONE RECEIVED: ", value);
-            Intent intent = new Intent(this, DetailedViewActivity.class);
-            intent.putExtra("SELECTED_REP", value);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+
+            String[] data = value.split("!");
+            String rep_name = data[0];
+            String rep_id = data[1];
+            String end_term = data[2];
+
+
+            String bill_url = "https://congress.api.sunlightfoundation.com/bills?sponsor_id=" + rep_id + "&apikey=" + sunlightKey;
+            String committee_url = "https://congress.api.sunlightfoundation.com/committees?member_ids=" + rep_id + "&apikey=" + sunlightKey;
+            new RetrieveRepDetails(this.getBaseContext(), rep_name, end_term).execute(bill_url, committee_url);
         }
 
     }

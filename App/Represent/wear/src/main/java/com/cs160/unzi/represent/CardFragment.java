@@ -43,15 +43,20 @@ public class CardFragment extends Fragment {
     private Rect mCardPadding;
     private boolean mActivityCreated;
 
+    private static String termEndDate;
+    private static String bioguideId;
+    private static String repImage;
+
     public CardFragment() {
     }
 
-    public static CardFragment create(CharSequence title, CharSequence description) {
-        return create(title, description, 0);
-    }
-
-    public static CardFragment create(CharSequence title, CharSequence text, int iconRes) {
+    public static CardFragment create(CharSequence title, CharSequence text, String rep_image,
+                                      String bioguide_id, String term_end_date, int iconRes) {
         CardFragment fragment = new CardFragment();
+        termEndDate = term_end_date;
+        bioguideId = bioguide_id;
+        repImage = rep_image;
+
         Bundle args = new Bundle();
         if(title != null) {
             args.putCharSequence("CardFragment_title", title);
@@ -314,22 +319,28 @@ public class CardFragment extends Fragment {
                 title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, args.getInt("CardFragment_icon"), 0);
             }
         }
-//        view.setOnClickListener(new RepOnClickListener(args.getCharSequence("CardFragment_title").toString()));
+        view.setOnClickListener(new RepOnClickListener(bioguideId, termEndDate, args.getCharSequence("CardFragment_title").toString()));
 
         return view;
     }
 
     public class RepOnClickListener implements View.OnClickListener {
-        String rep_name;
+        String repName;
+        String bioguideId;
+        String termEndDate;
 
-        public RepOnClickListener(String name) {
-            this.rep_name = name;
+        public RepOnClickListener(String name, String term_end_date, String bioguide_id) {
+            repName = name;
+            bioguideId = bioguide_id;
+            termEndDate = term_end_date;
         }
 
         @Override
         public void onClick (View v) {
             Intent sendIntent = new Intent(getActivity(), WatchToPhoneService.class);
-            sendIntent.putExtra("SELECTED_REP", rep_name);
+            sendIntent.putExtra("repName", repName);
+            sendIntent.putExtra("repId", bioguideId);
+            sendIntent.putExtra("termEnd", termEndDate);
             getActivity().startService(sendIntent);
         }
     }

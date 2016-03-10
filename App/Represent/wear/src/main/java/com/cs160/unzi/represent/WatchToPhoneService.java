@@ -50,12 +50,18 @@ public class WatchToPhoneService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
-        final String selected_rep = extras.getString("SELECTED_REP");
+
+        final String repId = extras.getString("repId");
+        final String repName = extras.getString("repName");
+        final String termEnd = extras.getString("termEnd");
+
+        final String data = repId + "!" + repName + "!" + termEnd;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 mWatchApiClient.connect();
-                sendMessage("/display_rep", selected_rep);
+                sendMessage("/rep_info", data);
             }
         }).start();
         return START_STICKY;
@@ -76,6 +82,5 @@ public class WatchToPhoneService extends Service {
                 }
             }
         }).start();
-
     }
 }

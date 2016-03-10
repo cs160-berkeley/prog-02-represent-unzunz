@@ -77,8 +77,11 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             mostRecentTweets.put(full_name, "");
             repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
-            String[] party_pic = new String[2];
-            party_pic[0] = rep.get("party");
+            String[] party_pic = new String[5];
+            party_pic[0] = rep.get("bioguide_id");
+            party_pic[1] = rep.get("party");
+            party_pic[2] = rep.get("term_end");
+
             watchContent.put(full_name, party_pic);
         }
         Log.i("RETRIEVEREPS", "ok");

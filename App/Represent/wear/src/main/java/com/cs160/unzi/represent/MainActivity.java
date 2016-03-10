@@ -85,12 +85,17 @@ public class MainActivity extends Activity implements
         String[][] rep_names = new String[2][size];
         String[][] rep_parties = new String[2][size];
         String[][] rep_images = new String[2][size];
+        String[] bioguide_ids = new String[size];
+        String[] end_term_dates = new String[size];
 
         int index = 0;
         for (String key : watch_content.keySet()) {
+            String[] info = watch_content.get(key);
             rep_names[0][index] = key;
-            rep_parties[0][index] = watch_content.get(key)[0];
-            rep_images[0][index] = watch_content.get(key)[1];
+            bioguide_ids[index] = info[0];
+            rep_parties[0][index] = info[1];
+            end_term_dates[index] = info[2];
+            rep_images[0][index] = info[3];
             index++;
         }
 
@@ -103,6 +108,8 @@ public class MainActivity extends Activity implements
         intent.putExtra("repNames", rep_names);
         intent.putExtra("repParties", rep_parties);
         intent.putExtra("repImages", rep_images);
+        intent.putExtra("bioguideIds", bioguide_ids);
+        intent.putExtra("endTermDates", end_term_dates);
 
         startActivity(intent);
     }

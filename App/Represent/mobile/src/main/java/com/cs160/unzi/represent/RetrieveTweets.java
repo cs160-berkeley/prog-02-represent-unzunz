@@ -94,7 +94,7 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
                 mostRecentTweets.put(rep.getKey(), text);
                 repPictures.put(rep.getKey(), image_url);
                 String[] holder = watchContent.get(rep.getKey());
-                holder[1] = image_url;
+                holder[3] = image_url;
                 watchContent.put(rep.getKey(), holder);
 
 //

@@ -34,60 +34,42 @@ public class CongressionalViewActivity extends FragmentActivity {
         String[][] repNames = (String[][]) intent.getSerializableExtra("repNames");
         String[][] repParties = (String[][]) intent.getSerializableExtra("repParties");
         String[][] repImages = (String[][]) intent.getSerializableExtra("repImages");
+        String[] endTermDates = (String[]) intent.getSerializableExtra("endTermDates");
+        String[] bioguideIds = (String[]) intent.getSerializableExtra("bioguideIds");
 
-//        final DotsPageIndicator mPageIndicator;
-//        final GridViewPager mViewPager;
-
-
-        // Get UI references
         DotsPageIndicator mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         GridViewPager mViewPager = (GridViewPager) findViewById(R.id.pager);
 
-//
-//        if (location.equals("94704")) {
-//            String[][] rep_names = {
-//                    {"Barbara Lee", "Jerry McNerney", "Loni Hancock"},
-//                    {"Obama - 59.3%"}
-//            };
-//            String[][] rep_parties = {
-//                    {"Democratic", "Democratic", "Democratic"},
-//                    {"Romney - 38.3%"}
-//            };
-//            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
-//            mPageIndicator.setPager(mViewPager);
-//        } else {
-//            String[][] rep_names = {
-//                    {"Duncan L. Hunter", "Duncan D. Hunter", "Scott Peters"},
-//                    {"Obama - 52.6%"}
-//            };
-//            String[][] rep_parties = {
-//                    {"Republican", "Republican", "Democratic"},
-//                    {"Romney - 45%"}
-//            };
-//            mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), rep_names, rep_parties, location));
-//            mPageIndicator.setPager(mViewPager);
-//        }
-
-        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), repNames, repParties, "94704"));
+        mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), repNames, repParties,
+                                                   repImages, bioguideIds, endTermDates));
         mPageIndicator.setPager(mViewPager);
     }
     private static final class GridPagerAdapter extends FragmentGridPagerAdapter {
 
         String[][] repNames;
         String[][] repParties;
-        String location;
+        String[][] repImages;
+        String[] bioguideIds;
+        String[] endTermDates;
 
-        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties, String location) {
+//        String location;
+
+        private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties,
+                                 String[][] rep_images, String[] bioguide_ids, String[] end_term_dates) {
             super(fm);
             repNames = rep_names;
             repParties = rep_parties;
-            this.location = location;
+            repImages = rep_images;
+            bioguideIds = bioguide_ids;
+            endTermDates = end_term_dates;
+//            this.location = location;
         }
 
 
         @Override
         public Fragment getFragment(int row, int column) {
-            return CardFragment.create(repNames[row][column], location + ": " + repParties[row][column]);
+            return CardFragment.create(repNames[row][column], repParties[row][column], repImages[row][column],
+                                       bioguideIds[column], endTermDates[column], 0);
         }
 
         @Override
