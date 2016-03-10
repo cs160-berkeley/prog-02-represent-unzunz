@@ -36,19 +36,21 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     private static HashMap<String, String> repPictures;
     private static HashMap<String, String> twitterIds;
     private static ArrayList<HashMap<String, String>> repsInfo;
+    private static HashMap<String, String> watchContent;
 //    public AsyncResponse delegate = null;
 
 //    public interface AsyncResponse {
 //        void processFinish(ArrayList<HashMap<String, String>> output);
 //    }
 
-    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids, HashMap<String, String> most_recent_tweets, HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info) {
+    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids, HashMap<String, String> most_recent_tweets, HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info, HashMap<String, String> watch_content) {
         bearerToken = bearer_token;
         twitterIds = twitter_ids;
         mostRecentTweets = most_recent_tweets;
         repsInfo = reps_info;
         mContext = context;
         repPictures = rep_pictures;
+        watchContent = watch_content;
     }
 
     protected String doInBackground(String... urls) {
@@ -109,12 +111,18 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     }
 
     protected void onPostExecute(String something) {
-        Intent intent = new Intent(mContext, CongressionalViewActivity.class);
-        intent.putExtra("repsInfo", repsInfo);
-        intent.putExtra("recentTweets", mostRecentTweets);
-        intent.putExtra("repPictures", repPictures);
-//        intent.putExtra("BearerToken", bearerToken);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+//        Intent intent = new Intent(mContext, CongressionalViewActivity.class);
+//        intent.putExtra("repsInfo", repsInfo);
+//        intent.putExtra("recentTweets", mostRecentTweets);
+//        intent.putExtra("repPictures", repPictures);
+////        intent.putExtra("BearerToken", bearerToken);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        mContext.startActivity(intent);
+        Log.i("RetrieveTweets", "ok");
+        Intent toWatch = new Intent(mContext, sendWatchData.class);
+//        toWatch.putExtra("repPictures", repPictures);
+//        toWatch.putExtra("watchCOntent", watchContent);
+//        toWatch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startService(toWatch);
     }
 }

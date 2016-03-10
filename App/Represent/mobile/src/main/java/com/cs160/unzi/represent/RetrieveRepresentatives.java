@@ -27,15 +27,19 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
 
     private Context mContext;
     private String bearerToken;
+    public AsyncResponse delegate = null;
 
+    public interface AsyncResponse {
+        void processFinish(HashMap<String, String> watch_content, HashMap<String, String> rep_pics);
+    }
 
-    public RetrieveRepresentatives(Context context, String bearer_token) {
+    public RetrieveRepresentatives(AsyncResponse delegeate, Context context, String bearer_token) {
+        this.delegate = delegate;
         mContext = context;
         bearerToken = bearer_token;
     }
 
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
-        Log.i("HELLO", "HI");
         JSONObject reps_info = JSONparser.makeHttpRequest(urls[0]);
         ArrayList<HashMap<String, String>> reps_list = new ArrayList<HashMap<String, String>>();
         try {
@@ -65,6 +69,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
         HashMap<String, String> twitterIds = new HashMap<String, String>();
         HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
         HashMap<String, String> repPictures = new HashMap<String, String>();
+        HashMap<String, String> watchContent = new HashMap<String, String>();
         String full_name;
 
         for (HashMap<String, String> rep : reps_info) {
@@ -72,9 +77,11 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             mostRecentTweets.put(full_name, "");
             repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
+            watchContent.put(full_name, rep.get("party"));
         }
+        Log.i("RETRIEVEREPS", "ok");
         if (!twitterIds.isEmpty()) {
-            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds, mostRecentTweets, repPictures, reps_info);
+            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds, mostRecentTweets, repPictures, reps_info, watchContent);
             tweetsAsync.execute();
         }
     }

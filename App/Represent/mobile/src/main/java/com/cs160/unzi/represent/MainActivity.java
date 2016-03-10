@@ -1,6 +1,7 @@
 package com.cs160.unzi.represent;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.wearable.Wearable;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private GoogleApiClient mGoogleApiClient;
     private GeoApiContext mGeoContext;
 
+    private HashMap<String, String> watchContent;
+    private HashMap<String, String> repPics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
+                    .addApi(Wearable.API)
                     .build();
         }
 
@@ -114,7 +120,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             url_string = "congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
                          latitude + "&longitude=" + longitude + "&apikey=946f65d6df5c4ae2b5f9ddb58fd867f5";
         }
-        new RetrieveRepresentatives(this.getBaseContext(), bearerToken).execute(url_string);
+
+        RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(new RetrieveRepresentatives.AsyncResponse(){
+
+            @Override
+            public void processFinish(HashMap<String, String> watch_content, HashMap<String, String> rep_pics) {
+                watchContent = watch_content;
+                repPics = rep_pics;
+            }
+        }, this.getBaseContext(), bearerToken);
+
+        asyncTask.execute(url_string);
     }
 
 
