@@ -35,7 +35,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final String GeocodeKey = "AIzaSyBHfgizrN9qO7kO_ouKzjBsQCdGluAX168";
+    private final String GeocodeKey = "AIzaSyCifyP8sNEZFA4tKYSwsgPx1ftk-1zVpxk";
     private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
     private final String twitterConsumerKey = "Y2kIN6M8Z8kc0T5MZMaPPwhTx";
     private final String twitterConsumerSecret = "V9qxwhzlP1XAQX6rKjdToXoC6XA4olURktLc0PNwkTyTlRiBKq";
@@ -58,14 +58,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(twitterConsumerKey, twitterConsumerSecret);
         Fabric.with(this, new Twitter(authConfig));
-
-//        try {
-//            TwitterLoginActivity.requestBearerToken();
-//        } catch (Exception e) {
-//            Log.i("ERROR", e.toString());
-//        }
-
-//        new RetrieveTweets().execute("UGH");
 
         RetrieveTwitterBearerToken TwitterAsyncTask =new RetrieveTwitterBearerToken(new RetrieveTwitterBearerToken.AsyncResponse() {
             @Override
@@ -122,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             url_string = "congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
                          latitude + "&longitude=" + longitude + "&apikey=946f65d6df5c4ae2b5f9ddb58fd867f5";
         }
-        new RetrieveRepresentatives(this.getBaseContext()).execute(url_string);
+        new RetrieveRepresentatives(this.getBaseContext(), bearerToken).execute(url_string);
     }
 
 
@@ -131,10 +123,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnected(Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             current_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            Log.i("LOCATION", current_location.toString());
         }
 
         if (current_location != null) {
+            Log.i("LOCATION", current_location.toString());
             LatLng location_input = new LatLng(current_location.getLatitude(), current_location.getLongitude());
             GeocodingApiRequest geocode_request = GeocodingApi.reverseGeocode(mGeoContext, location_input);
 

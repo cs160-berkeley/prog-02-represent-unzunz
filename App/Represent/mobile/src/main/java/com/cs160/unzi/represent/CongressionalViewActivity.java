@@ -31,15 +31,21 @@ import java.util.HashMap;
 
 public class CongressionalViewActivity extends AppCompatActivity {
 
-    private String bearerToken = "";
+//    private HashMap<String, String> twitterIds = new HashMap<String, String>();
+//    private HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
+//    private HashMap<String, String> repPictures = new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_congressional_view);
-        ArrayList<HashMap<String, String>> reps_info = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("ArrayList");
+        ArrayList<HashMap<String, String>> repsInfo = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("repsInfo");
+        HashMap<String, String> mostRecentTweets = (HashMap<String, String>) getIntent().getSerializableExtra("recentTweets");
+        HashMap<String, String> repPictures = (HashMap<String, String>) getIntent().getSerializableExtra("repPictures");
 
-        Log.i("WE HEREEE", reps_info.toString());
+        Log.i("WE HEREEE", repsInfo.toString());
+        Log.i("WE HEREEE", mostRecentTweets.toString());
+        Log.i("WE HEREEE", repPictures.toString());
 //        Intent intent = getIntent();
 //        ArrayList<String> rep_names = intent.getStringArrayListExtra("REPRESENTATIVES");
 //        ArrayList<String> rep_parties = intent.getStringArrayListExtra("PARTIES");
@@ -48,24 +54,44 @@ public class CongressionalViewActivity extends AppCompatActivity {
 //        ArrayList<String> rep_tweets = intent.getStringArrayListExtra("TWEETS");
 //        ArrayList<String> presidential_results = intent.getStringArrayListExtra("REPRESENTATIVES");
 
-        LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
 
-        if (reps_info != null) {
-            for (HashMap<String, String> rep : reps_info) {
+//        String full_name;
+//        for (HashMap<String, String> rep : reps_info) {
+//            full_name = rep.get("first_name") + " " + rep.get("last_name");
+//            mostRecentTweets.put(full_name, "");
+//            repPictures.put(full_name, "");
+//            twitterIds.put(full_name, rep.get("twitter_id"));
+//        }
+//        if (!twitterIds.isEmpty()) {
+//            RetrieveTweets.AsyncResponse async_response = new RetrieveTweets.AsyncResponse() {
+//                @Override
+//                public void processFinish(ArrayList<HashMap<String, String>> output) {
+//                    mostRecentTweets = output.get(0);
+//                    Log.i("TWEETS", mostRecentTweets.keySet().toString());
+//                    repPictures = output.get(1);
+//                }
+//            };
+//            RetrieveTweets tweetsAsync = new RetrieveTweets(async_response, bearerToken, twitterIds, mostRecentTweets, repPictures);
+//            tweetsAsync.execute();
+//        }
+
+        LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
+        String full_name;
+        if (repsInfo != null) {
+            for (HashMap<String, String> rep : repsInfo) {
+                full_name = rep.get("first_name") + " " + rep.get("last_name");
                 View view = getLayoutInflater().inflate(R.layout.rep_view, congressionalLayout, false);
                 TextView nameView = (TextView) view.findViewById(R.id.rep_name);
                 TextView emailView = (TextView) view.findViewById(R.id.rep_email);
                 TextView webView = (TextView) view.findViewById(R.id.rep_web);
                 TextView tweetView = (TextView) view.findViewById(R.id.rep_tweet);
-//
-                nameView.setText(rep.get("first_name") + " " + rep.get("last_name") + " " + rep.get("party"));
+                nameView.setText(full_name + " " + rep.get("party"));
                 emailView.setText(rep.get("oc_email"));
-
-//                tweetView.setText(rep_tweets.get(index));
+                tweetView.setText(mostRecentTweets.get(full_name).toString());
                 webView.setText(rep.get("website"));
-//
+
                 RepOnClickListener click_listener = new RepOnClickListener();
-                click_listener.setRepName("first_name" + " " + "last_name");
+                click_listener.setRepName(full_name);
                 view.setOnClickListener(click_listener);
 
                 congressionalLayout.addView(view);

@@ -26,9 +26,12 @@ import javax.net.ssl.HttpsURLConnection;
 public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
     private Context mContext;
+    private String bearerToken;
 
-    public RetrieveRepresentatives(Context context) {
+
+    public RetrieveRepresentatives(Context context, String bearer_token) {
         mContext = context;
+        bearerToken = bearer_token;
     }
 
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
@@ -58,9 +61,22 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
     }
 
     protected void onPostExecute(ArrayList<HashMap<String, String>> reps_info) {
-        Intent intent = new Intent(mContext, CongressionalViewActivity.class);
-        intent.putExtra("ArrayList", reps_info);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+
+        HashMap<String, String> twitterIds = new HashMap<String, String>();
+        HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
+        HashMap<String, String> repPictures = new HashMap<String, String>();
+        String full_name;
+
+        for (HashMap<String, String> rep : reps_info) {
+            full_name = rep.get("first_name") + " " + rep.get("last_name");
+            mostRecentTweets.put(full_name, "");
+            repPictures.put(full_name, "");
+            twitterIds.put(full_name, rep.get("twitter_id"));
+            Log.i("TWITTER:", rep.get("twitter_id"));
+        }
+        if (!twitterIds.isEmpty()) {
+            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds, mostRecentTweets, repPictures, reps_info);
+            tweetsAsync.execute();
+        }
     }
 }
