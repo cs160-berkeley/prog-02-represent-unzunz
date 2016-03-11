@@ -12,8 +12,11 @@ import android.util.Log;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +47,8 @@ public class PhoneListenerService extends WearableListenerService {
             new RetrieveRepDetails(this.getBaseContext(), rep_name, end_term, rep_pic).execute(bill_url, committee_url);
         } else if (messageEvent.getPath().equalsIgnoreCase("/shake")) {
             String new_location = retrieveZipCodes();
+            Log.i("NEW LOCATION: ", new_location);
+
             Intent intent = new Intent(this, RetrieveContent.class);
             intent.putExtra("LOCATION", new_location);
             startService(intent);
@@ -53,18 +58,19 @@ public class PhoneListenerService extends WearableListenerService {
     private String retrieveZipCodes() {
         ArrayList<String> zipcodes = new ArrayList<String>();
         try {
-            Scanner scanner = new Scanner(getAssets().open("zipcodes.csv"));
-            scanner.useDelimiter("\n");
-            while (scanner.hasNext()) {
-                zipcodes.add(scanner.next());
+            InputStream all_zips = getAssets().open("zipcodes.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(all_zips));
+            StringBuilder out = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                zipcodes.add(line);
             }
-            scanner.close();
+            reader.close();
         } catch (Exception e) {
-
+            Log.i("ERROR CSV", e.getMessage());
         }
         Random random = new Random();
         int random_index = random.nextInt(zipcodes.size());
-        Log.i("RANDOM", String.valueOf(random_index));
         return zipcodes.get(random_index);
     }
     private Bitmap StringToBitMap(String encodedString){

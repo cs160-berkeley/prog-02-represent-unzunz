@@ -52,6 +52,7 @@ public class WatchToPhoneService extends Service {
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
+            Log.i("SHAKE", String.valueOf(extras.getBoolean("shake")));
             if (extras.getBoolean("shake")) {
                 new Thread(new Runnable() {
                     @Override
@@ -87,8 +88,6 @@ public class WatchToPhoneService extends Service {
                 NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mWatchApiClient).await();
                 for (Node node : nodes.getNodes()) {
                     Log.i("PATHNAME: ", path);
-                    Log.i("SELECTED_NAME", text);
-                    Log.i("SELECTED_NODE", node.getId());
                     MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
                             mWatchApiClient, node.getId(), path, text.getBytes()
                     ).await();

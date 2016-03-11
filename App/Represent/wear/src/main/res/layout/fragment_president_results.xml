@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#ff0fff"
+        android:background="@color/colorPrimary"
         app:layout_box="all">
 
         <TextView

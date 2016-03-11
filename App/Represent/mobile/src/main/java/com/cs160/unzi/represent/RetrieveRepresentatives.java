@@ -72,6 +72,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
 
         for (HashMap<String, String> rep : reps_info) {
             full_name = rep.get("first_name") + " " + rep.get("last_name");
+            Log.i("NAME", full_name);
             mostRecentTweets.put(full_name, "");
             repBitMapPictures.put(full_name, null);
             twitterIds.put(full_name, rep.get("twitter_id"));
@@ -84,6 +85,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             watchContent.put(full_name, info);
         }
         Log.i("RETRIEVEREPS", "ok");
+        Log.i("RETRIEVEREPS", twitterIds.toString());
         Log.i("RETRIEVEREPS", twitterIds.toString());
         if (!twitterIds.isEmpty()) {
             Log.i("RETRIEVEREPS", "ok???");

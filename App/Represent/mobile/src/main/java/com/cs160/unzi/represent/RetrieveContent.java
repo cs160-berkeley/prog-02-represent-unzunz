@@ -25,6 +25,8 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
 import com.google.maps.PendingResult;
+import com.google.maps.model.AddressComponent;
+import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.twitter.sdk.android.Twitter;
@@ -122,57 +124,49 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
 //            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + "94704" + "&apikey=" + sunlightKey;
         }
         RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(this.getBaseContext(), bearerToken, presResults);
-        asyncTask.execute(url_string, zipCodeSearch);
+        asyncTask.execute(url_string);
     }
 
     public void setLocation(String search_type) {
         GeocodingApiRequest geocode_request;
         if (search_type == zipCodeSearch) {
             geocode_request = GeocodingApi.geocode(mGeoContext, zipCode);
-            geocode_request.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
-                @Override
-                public void onResult(GeocodingResult[] result) {
-                    county = result[0].addressComponents[2].longName;
-                    state = result[0].addressComponents[3].shortName;
-                    Log.i("COUNTY", county);
-                    Log.i("STATE", state);
-                    presResults = getPresidentialResults(state, county);
-                    try {
-                        retrieveRepresentatives();
-                    } catch (IOException e) {
-                        Log.e("ERROR GEO", e.getMessage());
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable e) {
-                    Log.i("ERROR ONCONNECTED", e.getMessage());
-                }
-            });
         } else {
             LatLng location_input = new LatLng(current_location.getLatitude(), current_location.getLongitude());
             geocode_request = GeocodingApi.reverseGeocode(mGeoContext, location_input);
-            geocode_request.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
-                @Override
-                public void onResult(GeocodingResult[] result) {
-                    county = result[0].addressComponents[3].longName;
-                    state = result[0].addressComponents[4].shortName;
-                    Log.i("COUNTY", county);
-                    Log.i("STATE", state);
-                    presResults = getPresidentialResults(state, county);
-                    try {
-                        retrieveRepresentatives();
-                    } catch (IOException e) {
-                        Log.e("ERROR GEO", e.getMessage());
+        }
+        geocode_request.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
+            @Override
+            public void onResult(GeocodingResult[] result) {
+                Log.i("0", result[0].addressComponents.toString());
+                for (AddressComponent component : result[0].addressComponents) {
+                    AddressComponentType[] component_types = component.types;
+                    for (int i = 0; i < component_types.length; i++) {
+                        AddressComponentType component_type = component_types[i];
+                        if (component_type.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1)) {
+                            state = component.shortName;
+                            Log.i("STATE", state);
+                        } else if (component_type.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_2)) {
+                            county = component.longName;
+                            Log.i("county", county);
+                        }
                     }
                 }
-
-                @Override
-                public void onFailure(Throwable e) {
-                    Log.i("ERROR ONCONNECTED", e.getMessage());
+                Log.i("COUNTY", county);
+                Log.i("STATE", state);
+                presResults = getPresidentialResults(state, county);
+                try {
+                    retrieveRepresentatives();
+                } catch (IOException e) {
+                    Log.e("ERROR GEO", e.getMessage());
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Log.i("ERROR ONCONNECTED", e.getMessage());
+            }
+        });
     }
 
     @Override

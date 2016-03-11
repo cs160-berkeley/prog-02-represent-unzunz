@@ -143,8 +143,8 @@ public class MainActivity extends Activity implements
                 lastUpdate = curTime;
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
+                Log.i("SHAKING", String.valueOf(speed));
                 if (speed > SHAKE_THRESHOLD) {
-                    Log.i("SHAKING", "asfdafss");
                     Intent intent = new Intent(this, WatchToPhoneService.class);
                     intent.putExtra("shake", true);
                     startService(intent);
