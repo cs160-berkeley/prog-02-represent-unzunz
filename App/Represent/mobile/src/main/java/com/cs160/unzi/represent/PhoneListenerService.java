@@ -23,9 +23,9 @@ public class PhoneListenerService extends WearableListenerService {
             String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
 
             String[] data = value.split("!");
-            String rep_name = data[0];
-            String rep_id = data[1];
-            String end_term = data[2];
+            String rep_name = data[1];
+            String rep_id = data[2];
+            String end_term = data[0];
 
 
             String bill_url = "https://congress.api.sunlightfoundation.com/bills?sponsor_id=" + rep_id + "&apikey=" + sunlightKey;

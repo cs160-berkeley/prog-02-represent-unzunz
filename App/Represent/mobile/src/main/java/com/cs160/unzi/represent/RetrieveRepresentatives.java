@@ -66,7 +66,6 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
 
         HashMap<String, String> twitterIds = new HashMap<String, String>();
         HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
-        HashMap<String, String> repPictures = new HashMap<String, String>();
         HashMap<String, Bitmap> repBitMapPictures = new HashMap<String, Bitmap>();
         HashMap<String, String[]> watchContent = new HashMap<String,String[]>();
         String full_name;
@@ -75,12 +74,12 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             full_name = rep.get("first_name") + " " + rep.get("last_name");
             mostRecentTweets.put(full_name, "");
             repBitMapPictures.put(full_name, null);
-            repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
             String[] info = new String[5];
             info[0] = rep.get("bioguide_id");
             info[1] = rep.get("party");
             info[2] = rep.get("term_end");
+            info[3] = "";
 
             watchContent.put(full_name, info);
         }
@@ -90,7 +89,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             Log.i("RETRIEVEREPS", "ok???");
             watchContent.put("pres_results", presResults);
             RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds,
-                                                            mostRecentTweets, repPictures, repBitMapPictures,
+                                                            mostRecentTweets, repBitMapPictures,
                                                             reps_info, watchContent);
             tweetsAsync.execute();
         }

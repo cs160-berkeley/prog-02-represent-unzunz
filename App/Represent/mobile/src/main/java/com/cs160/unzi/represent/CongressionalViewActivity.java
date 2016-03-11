@@ -88,6 +88,14 @@ public class CongressionalViewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.getBaseContext().startActivity(intent);
+        finish();
+    }
 
     public class RepOnClickListener implements OnClickListener {
         String repName;

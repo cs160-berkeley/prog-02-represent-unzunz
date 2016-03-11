@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:id="@+id/fragment_container">
 
-
     <TextView
         android:layout_width="42dp"
         android:layout_height="42dp"
@@ -18,12 +17,11 @@
         android:textSize="22sp"
         android:background="@drawable/blue_circle_bg"
         android:id="@+id/card_party"/>
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="86dp"
+        android:layout_height="58dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#FFFFFF"
+        android:background="#ffffff"
         app:layout_box="all">
 
         <TextView
@@ -33,7 +31,7 @@
             android:layout_gravity="center_vertical"
             android:text="Barbara Lee"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:id="@+id/card_name"/>
 
 

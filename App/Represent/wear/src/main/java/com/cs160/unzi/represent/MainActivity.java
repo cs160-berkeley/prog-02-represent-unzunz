@@ -60,18 +60,15 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.i("DATA", "IS CHANGING");
+        Log.i("HERE", "DATA");
         for (DataEvent event : dataEvents) {
             String eventUri = event.getDataItem().getUri().toString();
             if (eventUri.contains("/watchContent")) {
                 DataMapItem dataItem = DataMapItem.fromDataItem(event.getDataItem());
                 DataMap dataMap = dataItem.getDataMap();
-
                 HashMap<String, String[]> watchContent = new HashMap<String, String[]>();
                 for (String key : dataMap.keySet()) {
                     watchContent.put(key, dataMap.getStringArray(key));
-                    Log.i("KEY", key);
-                    Log.i("Value", dataMap.getStringArray(key).toString());
                 }
                 if (!watchContent.isEmpty()) {
                     setupGrid(watchContent);
@@ -83,31 +80,34 @@ public class MainActivity extends Activity implements
 
     private void setupGrid(HashMap<String, String[]> watch_content) {
         //state, county, obama, romney
+        Log.i("HERE", "GRID");
         String[] pres_results = watch_content.get("pres_results");
         watch_content.remove("pres_results");
         int size = watch_content.size();
 
-        String[][] rep_names = new String[2][size];
-        String[][] rep_parties = new String[2][size];
-        String[] rep_images = new String[size];
-        String[] bioguide_ids = new String[size];
-        String[] end_term_dates = new String[size];
+        String[] name_row = new String[size];
+        String[] party_row = new String[size];
+        String[] image_row = new String[size];
+        String[] term_end_row = new String[size];
+        String[] bioguide_row = new String[size];
 
         int index = 0;
         for (String key : watch_content.keySet()) {
             String[] info = watch_content.get(key);
-            rep_names[0][index] = key;
-            bioguide_ids[index] = info[0];
-            rep_parties[0][index] = info[1];
-            end_term_dates[index] = info[2];
-            rep_images[index] = info[3];
-            Log.i("IMAGE", info[3]);
+            name_row[index] = key;
+            bioguide_row[index] = info[0];
+            party_row[index] = info[1];
+            term_end_row[index] = info[2];
+            image_row[index] = info[3];
             index++;
         }
 
         //County, State
-        rep_names[1][0] = pres_results[1] + ", " + pres_results[0];
-        rep_parties[1][0] = "Obama - " + pres_results[2] + "%" + "\n" + "Romney - " + pres_results[3] + "%";
+        String[][] rep_names = {name_row, {pres_results[1] + ", " + pres_results[0]}};
+        String[][] rep_parties = {party_row, {pres_results[2]}};
+        String[][] rep_images = {image_row, {pres_results[3]}};
+        String[][] bioguide_ids = {bioguide_row, {"bio nothing"}};
+        String[][] term_end_dates = {term_end_row, {"end date nothing"}};
 
         Intent intent = new Intent(this, CongressionalViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -115,7 +115,7 @@ public class MainActivity extends Activity implements
         intent.putExtra("repParties", rep_parties);
         intent.putExtra("repImages", rep_images);
         intent.putExtra("bioguideIds", bioguide_ids);
-        intent.putExtra("endTermDates", end_term_dates);
+        intent.putExtra("termEndDates", term_end_dates);
 
         startActivity(intent);
     }

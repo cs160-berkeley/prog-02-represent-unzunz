@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="49%"
+            android:textColor="#000000"
+            android:textSize="26sp"
+            android:layout_marginBottom="122dp"
+            android:id="@+id/obama_results"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="31%"
+            android:textColor="#000000"
+            android:textSize="26sp"
+            android:layout_marginBottom="122dp"
+            android:id="@+id/romney_results"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Obama"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:layout_marginBottom="78dp" />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Romney"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:layout_marginBottom="78dp" />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="#ff0fff"
+        app:layout_box="all">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:text="San Diego, CA"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:id="@+id/location"/>
+
+    </FrameLayout>
+</android.support.wearable.view.BoxInsetLayout>

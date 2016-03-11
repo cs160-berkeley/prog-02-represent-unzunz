@@ -39,7 +39,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     private static StringBuilder result;
     private static String bearerToken;
     private static HashMap<String, String> mostRecentTweets;
-    private static HashMap<String, String> repPictures;
     private static HashMap<String, Bitmap> repBitmapPics;
     private static HashMap<String, String> twitterIds;
     private static ArrayList<HashMap<String, String>> repsInfo;
@@ -47,7 +46,7 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 
     public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids,
                           HashMap<String, String> most_recent_tweets,
-                          HashMap<String, String> rep_pictures, HashMap<String, Bitmap> rep_bitmap_pics,
+                          HashMap<String, Bitmap> rep_bitmap_pics,
                           ArrayList<HashMap<String, String>> reps_info,
                           HashMap<String,String[]> watch_content) {
         bearerToken = bearer_token;
@@ -55,7 +54,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         mostRecentTweets = most_recent_tweets;
         repsInfo = reps_info;
         mContext = context;
-        repPictures = rep_pictures;
         repBitmapPics = rep_bitmap_pics;
         watchContent = watch_content;
     }
@@ -109,25 +107,22 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 
                 try {
                     URL url = new URL(image_url);
-                    Bitmap bitmat_output = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    Log.i("UGH", "1");
+                    Bitmap bitmap_output = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    Bitmap bitmap_scaled = scaleDownBitmap(bitmap_output, 30, mContext);
                     ByteArrayOutputStream byte_ouput_stream = new ByteArrayOutputStream();
-                    bitmat_output.compress(Bitmap.CompressFormat.PNG, 100, byte_ouput_stream);
-                    Log.i("UGH", "2");
+                    bitmap_scaled.compress(Bitmap.CompressFormat.PNG, 100, byte_ouput_stream);
                     byte[] bytes = byte_ouput_stream.toByteArray();
                     String bitmap_string = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    Log.i("UGH", "3");
-                    repBitmapPics.put(rep.getKey(), scaleDownBitmap(bitmat_output, 30, mContext));
-                    Log.i("UGH", "4");
-                    repPictures.put(rep.getKey(), bitmap_string);
+                    repBitmapPics.put(rep.getKey(), scaleDownBitmap(bitmap_output, 30, mContext));
+                    String[] holder = watchContent.get(rep.getKey());
+                    holder[3] = bitmap_string;
+                    watchContent.put(rep.getKey(), holder);
                 } catch (Exception e) {
                     Log.i("Error", e.getMessage());
                 }
-                Log.i("UGH", "5");
             } catch (JSONException e) {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
             }
-            Log.i("UGH", "6");
 
 
         }
@@ -136,15 +131,10 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 
     protected void onPostExecute(String something) {
 
-        Log.i("UGH", "7");
         Intent intent = new Intent(mContext, CongressionalViewActivity.class);
-        Log.i("UGH", "8");
         intent.putExtra("repsInfo", repsInfo);
-        Log.i("UGH", "8");
         intent.putExtra("recentTweets", mostRecentTweets);
-        Log.i("UGH", "10");
         intent.putExtra("repPictures", repBitmapPics);
-        Log.i("UGH", "11");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 
