@@ -2,6 +2,7 @@ package com.cs160.unzi.represent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -66,12 +67,14 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
         HashMap<String, String> twitterIds = new HashMap<String, String>();
         HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
         HashMap<String, String> repPictures = new HashMap<String, String>();
+        HashMap<String, Bitmap> repBitMapPictures = new HashMap<String, Bitmap>();
         HashMap<String, String[]> watchContent = new HashMap<String,String[]>();
         String full_name;
 
         for (HashMap<String, String> rep : reps_info) {
             full_name = rep.get("first_name") + " " + rep.get("last_name");
             mostRecentTweets.put(full_name, "");
+            repBitMapPictures.put(full_name, null);
             repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
             String[] info = new String[5];
@@ -87,7 +90,8 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             Log.i("RETRIEVEREPS", "ok???");
             watchContent.put("pres_results", presResults);
             RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds,
-                                                            mostRecentTweets, repPictures, reps_info, watchContent);
+                                                            mostRecentTweets, repPictures, repBitMapPictures,
+                                                            reps_info, watchContent);
             tweetsAsync.execute();
         }
     }

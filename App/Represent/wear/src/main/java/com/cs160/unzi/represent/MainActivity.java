@@ -60,6 +60,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
+        Log.i("DATA", "IS CHANGING");
         for (DataEvent event : dataEvents) {
             String eventUri = event.getDataItem().getUri().toString();
             if (eventUri.contains("/watchContent")) {
@@ -100,6 +101,7 @@ public class MainActivity extends Activity implements
             rep_parties[0][index] = info[1];
             end_term_dates[index] = info[2];
             rep_images[index] = info[3];
+            Log.i("IMAGE", info[3]);
             index++;
         }
 

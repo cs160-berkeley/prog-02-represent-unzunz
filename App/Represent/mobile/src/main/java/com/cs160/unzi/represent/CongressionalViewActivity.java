@@ -3,6 +3,7 @@ package com.cs160.unzi.represent;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,11 +46,11 @@ public class CongressionalViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_congressional_view);
         ArrayList<HashMap<String, String>> repsInfo = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("repsInfo");
         HashMap<String, String> mostRecentTweets = (HashMap<String, String>) getIntent().getSerializableExtra("recentTweets");
-        HashMap<String, String> repPictures = (HashMap<String, String>) getIntent().getSerializableExtra("repPictures");
+        HashMap<String, Bitmap> repPictures = (HashMap<String, Bitmap>) getIntent().getSerializableExtra("repPictures");
 //
-//        Log.i("WE HEREEE", repsInfo.toString());
-//        Log.i("WE HEREEE", mostRecentTweets.toString());
-//        Log.i("WE HEREEE", repPictures.toString());
+        Log.i("WE HEREEE", repsInfo.toString());
+        Log.i("WE HEREEE", mostRecentTweets.toString());
+        Log.i("WE HEREEE", repPictures.toString());
 
         LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
         String full_name;
@@ -63,9 +65,18 @@ public class CongressionalViewActivity extends AppCompatActivity {
                 TextView emailView = (TextView) view.findViewById(R.id.rep_email);
                 TextView webView = (TextView) view.findViewById(R.id.rep_web);
                 TextView tweetView = (TextView) view.findViewById(R.id.rep_tweet);
+                ImageView picView = (ImageView) view.findViewById(R.id.rep_pic);
+
+                if (repPictures.get(full_name) != null) {
+                    picView.setImageBitmap(repPictures.get(full_name));
+                }
+
+                if (!mostRecentTweets.get(full_name).equals("")) {
+                    tweetView.setText(mostRecentTweets.get(full_name).toString());
+                }
+
                 nameView.setText(full_name + " " + rep.get("party"));
                 emailView.setText(rep.get("oc_email"));
-                tweetView.setText(mostRecentTweets.get(full_name).toString());
                 webView.setText(rep.get("website"));
 
                 RepOnClickListener click_listener = new RepOnClickListener();
