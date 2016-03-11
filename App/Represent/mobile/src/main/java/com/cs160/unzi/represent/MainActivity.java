@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.i("WE", "CONNECTED");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             current_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private String[] getPresidentialResults(String state, String county) {
+        Log.i("GETTING", "THE PRES RESULTS");
         JSONArray json_array = retrieveJSONfile();
         try {
             for (int i = 0; i < json_array.length(); i++) {

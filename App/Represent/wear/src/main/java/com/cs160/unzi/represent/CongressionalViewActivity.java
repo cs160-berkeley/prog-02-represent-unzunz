@@ -1,29 +1,26 @@
 package com.cs160.unzi.represent;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.FragmentGridPagerAdapter;
+import android.support.wearable.view.GridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
-import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CongressionalViewActivity extends FragmentActivity {
 
-    private TextView mTextView;
+    private Bitmap imageBitMap;
+    String[][] repNames;
+    String[][] repParties;
+    String[][] repImages;
+    String[][] bioguideIds;
+    String[][] termEndDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,45 +28,45 @@ public class CongressionalViewActivity extends FragmentActivity {
         setContentView(R.layout.activity_congressional_view);
 
         Intent intent = getIntent();
-        String[][] repNames = (String[][]) intent.getSerializableExtra("repNames");
-        String[][] repParties = (String[][]) intent.getSerializableExtra("repParties");
-        String[] repImages = (String[]) intent.getSerializableExtra("repImages");
-        String[] endTermDates = (String[]) intent.getSerializableExtra("endTermDates");
-        String[] bioguideIds = (String[]) intent.getSerializableExtra("bioguideIds");
+        repNames = (String[][]) intent.getSerializableExtra("repNames");
+        repParties = (String[][]) intent.getSerializableExtra("repParties");
+        repImages = (String[][]) intent.getSerializableExtra("repImages");
+        bioguideIds = (String[][]) intent.getSerializableExtra("bioguideIds");
+        termEndDates = (String[][]) intent.getSerializableExtra("termEndDates");
 
         DotsPageIndicator mPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         GridViewPager mViewPager = (GridViewPager) findViewById(R.id.pager);
 
         mViewPager.setAdapter(new GridPagerAdapter(getFragmentManager(), repNames, repParties,
-                                                   repImages, bioguideIds, endTermDates));
+                                                   repImages, bioguideIds, termEndDates));
         mPageIndicator.setPager(mViewPager);
-    }
+   }
+//
     private static final class GridPagerAdapter extends FragmentGridPagerAdapter {
 
         String[][] repNames;
         String[][] repParties;
-        String[] repImages;
-        String[] bioguideIds;
-        String[] endTermDates;
-
-//        String location;
+        String[][] repImages;
+        String[][] bioguideIds;
+        String[][] termEndDates;
 
         private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties,
-                                 String[] rep_images, String[] bioguide_ids, String[] end_term_dates) {
+                                 String[][] rep_images, String[][] bioguide_ids, String[][] term_end_dates) {
             super(fm);
             repNames = rep_names;
             repParties = rep_parties;
             repImages = rep_images;
             bioguideIds = bioguide_ids;
-            endTermDates = end_term_dates;
-//            this.location = location;
+            termEndDates = term_end_dates;
         }
-
 
         @Override
         public Fragment getFragment(int row, int column) {
-            return CardFragment.create(repNames[row][column], repParties[row][column], repImages[column],
-                                       bioguideIds[column], endTermDates[column], 0);
+            if (row == 1) {
+                return new PresidentResultsFragment().create(repImages[1][0], repParties[1][0], repNames[1][0]);
+            }
+            return  new CustomFragment().create(repNames[row][column], repParties[row][column],
+                    repImages[row][column], bioguideIds[row][column], termEndDates[row][column]);
         }
 
         @Override
@@ -82,5 +79,4 @@ public class CongressionalViewActivity extends FragmentActivity {
             return repNames[row].length;
         }
     }
-
 }

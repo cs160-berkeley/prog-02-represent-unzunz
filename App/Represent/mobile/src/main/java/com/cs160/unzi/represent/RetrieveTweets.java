@@ -1,8 +1,13 @@
 package com.cs160.unzi.represent;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.twitter.sdk.android.Twitter;
@@ -13,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,21 +39,22 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     private static StringBuilder result;
     private static String bearerToken;
     private static HashMap<String, String> mostRecentTweets;
-    private static HashMap<String, String> repPictures;
+    private static HashMap<String, Bitmap> repBitmapPics;
     private static HashMap<String, String> twitterIds;
     private static ArrayList<HashMap<String, String>> repsInfo;
     private static HashMap<String,String[]> watchContent;
 
     public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids,
                           HashMap<String, String> most_recent_tweets,
-                          HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info,
+                          HashMap<String, Bitmap> rep_bitmap_pics,
+                          ArrayList<HashMap<String, String>> reps_info,
                           HashMap<String,String[]> watch_content) {
         bearerToken = bearer_token;
         twitterIds = twitter_ids;
         mostRecentTweets = most_recent_tweets;
         repsInfo = reps_info;
         mContext = context;
-        repPictures = rep_pictures;
+        repBitmapPics = rep_bitmap_pics;
         watchContent = watch_content;
     }
 
@@ -91,32 +98,43 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
                 JSONObject object_0 = json_object.getJSONObject(0);
                 JSONObject user = (JSONObject) object_0.get("user");
                 String image_url = user.get("profile_image_url").toString();
+                image_url = image_url.replace("_normal","");
                 String text = object_0.get("text").toString();
 
 
                 mostRecentTweets.put(rep.getKey(), text);
-                repPictures.put(rep.getKey(), image_url);
-                String[] holder = watchContent.get(rep.getKey());
-                holder[3] = image_url;
-                watchContent.put(rep.getKey(), holder);
+                Log.i("RetrieveTweets", "BITMAP STUFF");
 
-//
-//                Log.i("FIELDs", object_0.names().toString());
-//                Log.i("TEXT", text);
-//                Log.i("IMage", image_url);
-
+                try {
+                    URL url = new URL(image_url);
+                    Bitmap bitmap_output = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    Bitmap bitmap_scaled = scaleDownBitmap(bitmap_output, 30, mContext);
+                    ByteArrayOutputStream byte_ouput_stream = new ByteArrayOutputStream();
+                    bitmap_scaled.compress(Bitmap.CompressFormat.PNG, 100, byte_ouput_stream);
+                    byte[] bytes = byte_ouput_stream.toByteArray();
+                    String bitmap_string = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    repBitmapPics.put(rep.getKey(), scaleDownBitmap(bitmap_output, 30, mContext));
+                    String[] holder = watchContent.get(rep.getKey());
+                    holder[3] = bitmap_string;
+                    watchContent.put(rep.getKey(), holder);
+                } catch (Exception e) {
+                    Log.i("Error", e.getMessage());
+                }
             } catch (JSONException e) {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
             }
+
+
         }
         return "hi";
     }
 
     protected void onPostExecute(String something) {
+
         Intent intent = new Intent(mContext, CongressionalViewActivity.class);
         intent.putExtra("repsInfo", repsInfo);
         intent.putExtra("recentTweets", mostRecentTweets);
-        intent.putExtra("repPictures", repPictures);
+        intent.putExtra("repPictures", repBitmapPics);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 
@@ -124,5 +142,18 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         Intent toWatch = new Intent(mContext, sendWatchData.class);
         toWatch.putExtra("watchContent", watchContent);
         mContext.startService(toWatch);
+
+
+    }
+    private static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
+
+        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
+
+        int h= (int) (newHeight*densityMultiplier);
+        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
+
+        photo=Bitmap.createScaledBitmap(photo, w, h, true);
+
+        return photo;
     }
 }
