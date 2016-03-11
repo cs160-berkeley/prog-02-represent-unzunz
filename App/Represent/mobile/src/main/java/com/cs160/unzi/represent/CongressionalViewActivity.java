@@ -80,7 +80,7 @@ public class CongressionalViewActivity extends AppCompatActivity {
                 webView.setText(rep.get("website"));
 
                 RepOnClickListener click_listener = new RepOnClickListener();
-                click_listener.setRepName(full_name);
+                click_listener.setRepName(full_name, repPictures.get(full_name));
                 view.setOnClickListener(click_listener);
 
                 congressionalLayout.addView(view);
@@ -99,21 +99,25 @@ public class CongressionalViewActivity extends AppCompatActivity {
 
     public class RepOnClickListener implements OnClickListener {
         String repName;
-        public void setRepName(String rep_name) {
+        Bitmap image;
+        public void setRepName(String rep_name, Bitmap image) {
             this.repName = rep_name;
+            this.image = image;
         }
 
         @Override
         public void onClick(View view) {
-            retrieveDetails(repName);
+            retrieveDetails(repName, image);
         }
     }
 
-    public void retrieveDetails(String repName) {
+    public void retrieveDetails(String repName, Bitmap image) {
         String rep_id = repsId.get(repName);
         String end_term = repsEndTerm.get(repName);
         String bill_url = "https://congress.api.sunlightfoundation.com/bills?sponsor_id=" + rep_id + "&apikey=" + sunlightKey;
         String committee_url = "https://congress.api.sunlightfoundation.com/committees?member_ids=" + rep_id + "&apikey=" + sunlightKey;
-        new RetrieveRepDetails(this.getBaseContext(), repName, end_term).execute(bill_url, committee_url);
+        HashMap<String, Bitmap> rep_image = new HashMap<String, Bitmap>();
+        rep_image.put(repName, image);
+        new RetrieveRepDetails(this.getBaseContext(), repName, end_term, rep_image).execute(bill_url, committee_url);
     };
 }

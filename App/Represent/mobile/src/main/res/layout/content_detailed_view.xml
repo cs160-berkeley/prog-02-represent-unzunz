@@ -17,7 +17,8 @@
             android:layout_weight="5"
             android:layout_width="0dp"
             android:layout_height="180dp"
-            android:src="@drawable/circle" />
+            android:src="@drawable/circle"
+            android:id="@+id/detail_pic"/>
 
         <LinearLayout
             android:layout_weight="4"

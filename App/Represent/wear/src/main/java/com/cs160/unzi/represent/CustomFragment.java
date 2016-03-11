@@ -85,7 +85,7 @@ public class CustomFragment extends Fragment {
         BoxInsetLayout box_container = (BoxInsetLayout) root.findViewById(R.id.fragment_container);
 
         box_container.setBackground(background);
-        root.setOnClickListener(new RepOnClickListener(name, bioguide, termEnd));
+        root.setOnClickListener(new RepOnClickListener(name, bioguide, termEnd, image));
         return root;
     }
 
@@ -105,11 +105,13 @@ public class CustomFragment extends Fragment {
         String repName;
         String bioguideId;
         String termEndDate;
+        String image;
 
-        public RepOnClickListener(String name, String term_end_date, String bioguide_id) {
+        public RepOnClickListener(String name, String term_end_date, String bioguide_id, String image) {
             repName = name;
             bioguideId = bioguide_id;
             termEndDate = term_end_date;
+            this.image = image;
         }
 
         @Override
@@ -118,6 +120,8 @@ public class CustomFragment extends Fragment {
             sendIntent.putExtra("repName", repName);
             sendIntent.putExtra("repId", bioguideId);
             sendIntent.putExtra("termEnd", termEndDate);
+            sendIntent.putExtra("image", image);
+            sendIntent.putExtra("shake", false);
             getActivity().startService(sendIntent);
         }
     }

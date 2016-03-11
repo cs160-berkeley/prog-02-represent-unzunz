@@ -52,19 +52,30 @@ public class WatchToPhoneService extends Service {
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
-            final String repId = extras.getString("repId");
-            final String repName = extras.getString("repName");
-            final String termEnd = extras.getString("termEnd");
+            if (extras.getBoolean("shake")) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWatchApiClient.connect();
+                        sendMessage("/shake", "shake");
+                    }
+                }).start();
+            } else {
+                final String repId = extras.getString("repId");
+                final String repName = extras.getString("repName");
+                final String termEnd = extras.getString("termEnd");
+                final String image = extras.getString("image");
 
-            final String data = repId + "!" + repName + "!" + termEnd;
+                final String data = repId + "!" + repName + "!" + termEnd + "!" + image;
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    mWatchApiClient.connect();
-                    sendMessage("/rep_info", data);
-                }
-            }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWatchApiClient.connect();
+                        sendMessage("/rep_info", data);
+                    }
+                }).start();
+            }
         }
         return START_STICKY;
     }

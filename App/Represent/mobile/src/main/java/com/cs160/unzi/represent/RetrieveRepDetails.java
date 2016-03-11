@@ -2,6 +2,7 @@ package com.cs160.unzi.represent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,11 +21,13 @@ public class RetrieveRepDetails extends AsyncTask<String, Void, HashMap<String, 
     private Context mContext;
     private String repName;
     private String endTerm;
+    private HashMap<String, Bitmap> image;
 
-    public RetrieveRepDetails(Context context, String rep_name, String end_term) {
+    public RetrieveRepDetails(Context context, String rep_name, String end_term, HashMap<String, Bitmap> image) {
         mContext = context;
         repName = rep_name;
         endTerm = end_term;
+        this.image = image;
     }
     protected HashMap<String, ArrayList<HashMap<String, String>>> doInBackground(String... urls) {
         try {
@@ -69,6 +72,7 @@ public class RetrieveRepDetails extends AsyncTask<String, Void, HashMap<String, 
         intent.putExtra("committeeInfo", result.get("rep_committees"));
         intent.putExtra("name", repName);
         intent.putExtra("endTerm", endTerm);
+        intent.putExtra("image", image);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }

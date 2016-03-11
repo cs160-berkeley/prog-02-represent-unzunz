@@ -1,16 +1,20 @@
 package com.cs160.unzi.represent;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,10 +37,16 @@ public class DetailedViewActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> committeeInfo = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("committeeInfo");
         String repName = (String) getIntent().getSerializableExtra("name");
         String endTerm = (String) getIntent().getSerializableExtra("endTerm");
+        HashMap<String, Bitmap> image = (HashMap<String, Bitmap>) getIntent().getSerializableExtra("image");
 
         TextView rep_name = (TextView) findViewById(R.id.detailed_name);
         TextView end_term = (TextView) findViewById(R.id.end_term);
 
+        Bitmap rep_image = image.get(repName);
+        if (rep_image != null) {
+            ImageView picView = (ImageView) findViewById(R.id.detail_pic);
+            picView.setImageBitmap(rep_image);
+        }
         rep_name.setText(repName);
         Log.i("ENDTER", endTerm);
         end_term.setText(endTerm);
@@ -65,6 +75,18 @@ public class DetailedViewActivity extends AppCompatActivity {
             bill_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             bill_view.setText(bill.get("introduced_on") + " " + bill.get("official_title"));
             bills_view.addView(bill_view);
+        }
+    }
+
+
+    private Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte= Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
         }
     }
 
