@@ -63,7 +63,7 @@ public class CongressionalViewActivity extends FragmentActivity {
         @Override
         public Fragment getFragment(int row, int column) {
             if (row == 1) {
-                return new PresidentResultsFragment().create(repNames[1][0], repParties[1][0], repNames[1][0]);
+                return new PresidentResultsFragment().create(repImages[1][0], repParties[1][0], repNames[1][0]);
             }
             return  new CustomFragment().create(repNames[row][column], repParties[row][column],
                     repImages[row][column], bioguideIds[row][column], termEndDates[row][column]);

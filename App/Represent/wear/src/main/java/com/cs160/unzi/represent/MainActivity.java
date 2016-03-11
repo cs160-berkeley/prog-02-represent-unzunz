@@ -104,8 +104,8 @@ public class MainActivity extends Activity implements
 
         //County, State
         String[][] rep_names = {name_row, {pres_results[1] + ", " + pres_results[0]}};
-        String[][] rep_parties = {party_row, {pres_results[2]}};
-        String[][] rep_images = {image_row, {pres_results[3]}};
+        String[][] rep_parties = {party_row, {pres_results[2] + "%"}};
+        String[][] rep_images = {image_row, {pres_results[3] + "%"}};
         String[][] bioguide_ids = {bioguide_row, {"bio nothing"}};
         String[][] term_end_dates = {term_end_row, {"end date nothing"}};
 
