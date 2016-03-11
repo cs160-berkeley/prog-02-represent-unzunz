@@ -29,7 +29,12 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private final String zipCodeSearch = "search-type-zip-code";
     private final String latLongSearch = "search-type-lat-long";
-    private String zipCode;
 
+    private String zipCode;
     private String latitude = "";
     private String longitude = "";
-    private String county = "";
+    private String[] presResults;
 
     private Location current_location = null;
     private GoogleApiClient mGoogleApiClient;
@@ -122,15 +127,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //                         latitude + "&longitude=" + longitude + "&apikey=" + sunlightKey;
             url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + "94704" + "&apikey=" + sunlightKey;
         }
-
-        RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(new RetrieveRepresentatives.AsyncResponse(){
-
-            @Override
-            public void processFinish(HashMap<String, String> watch_content, HashMap<String, String> rep_pics) {
-                watchContent = watch_content;
-                repPics = rep_pics;
-            }
-        }, this.getBaseContext(), bearerToken);
+        Log.i("PRES", presResults.toString());
+        RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(this.getBaseContext(), bearerToken, presResults);
 
         asyncTask.execute(url_string);
     }
@@ -154,7 +152,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             geocode_request.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
                 @Override
                 public void onResult(GeocodingResult[] result) {
-                    county = result[0].addressComponents[3].longName;
+                    String county = result[0].addressComponents[3].longName;
+                    String state = result[0].addressComponents[4].shortName;
+                    presResults = getPresidentialResults(state, county);
                 }
 
                 @Override
@@ -165,6 +165,49 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+    private String[] getPresidentialResults(String state, String county) {
+        JSONArray json_array = retrieveJSONfile();
+        try {
+            for (int i = 0; i < json_array.length(); i++) {
+                JSONObject info = (JSONObject) json_array.getJSONObject(i);
+                if (state.equals(info.get("state-postal")) && (county.equals(info.get("county-name") + " " + "County"))) {
+                    String[] result = {state, county, info.get("obama-percentage").toString(),
+                                       info.get("romney-percentage").toString()};
+                    return result;
+                }
+            }
+        } catch (JSONException e) {
+
+        }
+        return null;
+    }
+
+    private JSONArray retrieveJSONfile() {
+        String json_string = "";
+        JSONArray jsonArray;
+
+        try {
+
+            InputStream input_stream = getAssets().open("election-county-2012.json");
+            int size = input_stream.available();
+            byte[] byte_buffer = new byte[size];
+            input_stream.read(byte_buffer);
+            input_stream.close();
+
+            json_string = new String(byte_buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+        try {
+            jsonArray = new JSONArray(json_string);
+            return jsonArray;
+        } catch (JSONException e) {
+
+        }
+        return null;
+    }
 
     @Override
     public void onConnectionSuspended(int i) {

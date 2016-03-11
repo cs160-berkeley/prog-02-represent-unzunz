@@ -27,16 +27,13 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
 
     private Context mContext;
     private String bearerToken;
-    public AsyncResponse delegate = null;
+    private String[] presResults;
 
-    public interface AsyncResponse {
-        void processFinish(HashMap<String, String> watch_content, HashMap<String, String> rep_pics);
-    }
 
-    public RetrieveRepresentatives(AsyncResponse delegeate, Context context, String bearer_token) {
-        this.delegate = delegate;
+    public RetrieveRepresentatives(Context context, String bearer_token, String[] pres_results) {
         mContext = context;
         bearerToken = bearer_token;
+        presResults = pres_results;
     }
 
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
@@ -77,18 +74,20 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             mostRecentTweets.put(full_name, "");
             repPictures.put(full_name, "");
             twitterIds.put(full_name, rep.get("twitter_id"));
-            String[] party_pic = new String[5];
-            party_pic[0] = rep.get("bioguide_id");
-            party_pic[1] = rep.get("party");
-            party_pic[2] = rep.get("term_end");
+            String[] info = new String[5];
+            info[0] = rep.get("bioguide_id");
+            info[1] = rep.get("party");
+            info[2] = rep.get("term_end");
 
-            watchContent.put(full_name, party_pic);
+            watchContent.put(full_name, info);
         }
         Log.i("RETRIEVEREPS", "ok");
         Log.i("RETRIEVEREPS", twitterIds.toString());
         if (!twitterIds.isEmpty()) {
             Log.i("RETRIEVEREPS", "ok???");
-            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds, mostRecentTweets, repPictures, reps_info, watchContent);
+            watchContent.put("pres_results", presResults);
+            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds,
+                                                            mostRecentTweets, repPictures, reps_info, watchContent);
             tweetsAsync.execute();
         }
     }

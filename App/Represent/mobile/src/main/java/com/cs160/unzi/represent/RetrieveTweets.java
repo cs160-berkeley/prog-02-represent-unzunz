@@ -38,7 +38,10 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
     private static ArrayList<HashMap<String, String>> repsInfo;
     private static HashMap<String,String[]> watchContent;
 
-    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids, HashMap<String, String> most_recent_tweets, HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info, HashMap<String,String[]> watch_content) {
+    public RetrieveTweets(Context context, String bearer_token, HashMap<String, String> twitter_ids,
+                          HashMap<String, String> most_recent_tweets,
+                          HashMap<String, String> rep_pictures, ArrayList<HashMap<String, String>> reps_info,
+                          HashMap<String,String[]> watch_content) {
         bearerToken = bearer_token;
         twitterIds = twitter_ids;
         mostRecentTweets = most_recent_tweets;
@@ -120,7 +123,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         Log.i("RetrieveTweets", "ok");
         Intent toWatch = new Intent(mContext, sendWatchData.class);
         toWatch.putExtra("watchContent", watchContent);
-//        toWatch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startService(toWatch);
     }
 }
