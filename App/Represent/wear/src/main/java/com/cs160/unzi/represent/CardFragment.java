@@ -319,7 +319,9 @@ public class CardFragment extends Fragment {
                 title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, args.getInt("CardFragment_icon"), 0);
             }
         }
-        view.setOnClickListener(new RepOnClickListener(bioguideId, termEndDate, args.getCharSequence("CardFragment_title").toString()));
+        if (args.getCharSequence("CardFragment_title") != null) {
+            view.setOnClickListener(new RepOnClickListener(bioguideId, termEndDate, args.getCharSequence("CardFragment_title").toString()));
+        }
 
         return view;
     }

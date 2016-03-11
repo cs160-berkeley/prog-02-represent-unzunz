@@ -81,10 +81,14 @@ public class MainActivity extends Activity implements
     }
 
     private void setupGrid(HashMap<String, String[]> watch_content) {
+        //state, county, obama, romney
+        String[] pres_results = watch_content.get("pres_results");
+        watch_content.remove("pres_results");
         int size = watch_content.size();
+
         String[][] rep_names = new String[2][size];
         String[][] rep_parties = new String[2][size];
-        String[][] rep_images = new String[2][size];
+        String[] rep_images = new String[size];
         String[] bioguide_ids = new String[size];
         String[] end_term_dates = new String[size];
 
@@ -95,13 +99,13 @@ public class MainActivity extends Activity implements
             bioguide_ids[index] = info[0];
             rep_parties[0][index] = info[1];
             end_term_dates[index] = info[2];
-            rep_images[0][index] = info[3];
+            rep_images[index] = info[3];
             index++;
         }
 
-        rep_names[1][0] = "California";
-        rep_parties[1][0] = "Obama - 52.6%";
-        rep_images[1][0] = "Romney - 45%";
+        //County, State
+        rep_names[1][0] = pres_results[1] + ", " + pres_results[0];
+        rep_parties[1][0] = "Obama - " + pres_results[2] + "%" + "\n" + "Romney - " + pres_results[3] + "%";
 
         Intent intent = new Intent(this, CongressionalViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

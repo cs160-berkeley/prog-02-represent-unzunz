@@ -33,7 +33,7 @@ public class CongressionalViewActivity extends FragmentActivity {
         Intent intent = getIntent();
         String[][] repNames = (String[][]) intent.getSerializableExtra("repNames");
         String[][] repParties = (String[][]) intent.getSerializableExtra("repParties");
-        String[][] repImages = (String[][]) intent.getSerializableExtra("repImages");
+        String[] repImages = (String[]) intent.getSerializableExtra("repImages");
         String[] endTermDates = (String[]) intent.getSerializableExtra("endTermDates");
         String[] bioguideIds = (String[]) intent.getSerializableExtra("bioguideIds");
 
@@ -48,14 +48,14 @@ public class CongressionalViewActivity extends FragmentActivity {
 
         String[][] repNames;
         String[][] repParties;
-        String[][] repImages;
+        String[] repImages;
         String[] bioguideIds;
         String[] endTermDates;
 
 //        String location;
 
         private GridPagerAdapter(FragmentManager fm, String[][] rep_names, String[][] rep_parties,
-                                 String[][] rep_images, String[] bioguide_ids, String[] end_term_dates) {
+                                 String[] rep_images, String[] bioguide_ids, String[] end_term_dates) {
             super(fm);
             repNames = rep_names;
             repParties = rep_parties;
@@ -68,7 +68,7 @@ public class CongressionalViewActivity extends FragmentActivity {
 
         @Override
         public Fragment getFragment(int row, int column) {
-            return CardFragment.create(repNames[row][column], repParties[row][column], repImages[row][column],
+            return CardFragment.create(repNames[row][column], repParties[row][column], repImages[column],
                                        bioguideIds[column], endTermDates[column], 0);
         }
 
