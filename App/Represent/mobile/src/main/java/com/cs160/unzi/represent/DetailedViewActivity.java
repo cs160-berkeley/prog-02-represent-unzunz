@@ -56,24 +56,20 @@ public class DetailedViewActivity extends AppCompatActivity {
         LinearLayout committees_view = (LinearLayout) findViewById(R.id.committees);
         LinearLayout bills_view = (LinearLayout) findViewById(R.id.bills);
 
-        int index = 0;
         for (HashMap<String, String> committee : committeeInfo) {
-            TextView committee_view = new TextView(this);
-
-//            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams();
-            committee_view.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-            committee_view.setHeight(142);
-            committee_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-            committee_view.setText(committee.get("name"));
+            View committee_view = getLayoutInflater().inflate(R.layout.committee_row, bills_view, false);
+            TextView committeeName = (TextView) committee_view.findViewById(R.id.committee_name);
+            Log.i("COMMITTEE", committee.get("name"));
+            committeeName.setText(committee.get("name"));
             committees_view.addView(committee_view);
-
         }
+
         for (HashMap<String, String> bill : billInfo) {
-            TextView bill_view = new TextView(this);
-            bill_view.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-            bill_view.setHeight(142);
-            bill_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-            bill_view.setText(bill.get("introduced_on") + " " + bill.get("official_title"));
+            View bill_view = getLayoutInflater().inflate(R.layout.bill_row, bills_view, false);
+            TextView billName = (TextView) bill_view.findViewById(R.id.bill_name);
+            TextView billDate = (TextView) bill_view.findViewById(R.id.bill_date);
+            billDate.setText(bill.get("introduced_on"));
+            billName.setText(bill.get("official_title"));
             bills_view.addView(bill_view);
         }
     }

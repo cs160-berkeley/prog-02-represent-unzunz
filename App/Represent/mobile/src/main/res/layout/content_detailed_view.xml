@@ -7,16 +7,18 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.cs160.unzi.represent.DetailedViewActivity"
-    tools:showIn="@layout/activity_detailed_view">
+    tools:showIn="@layout/activity_detailed_view"
+    android:background="#ffffff">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_weight="5"
+            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="180dp"
+            android:padding="22dp"
             android:src="@drawable/circle"
             android:id="@+id/detail_pic"/>
 
@@ -30,15 +32,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="6dp"
                 android:text="Barbara Lee"
+                android:textColor="@color/textPrimary"
                 android:textSize="22sp"
                 android:color="#FFFFFF"
                 android:id="@+id/detailed_name" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="4dp"
                 android:text="End of term:"
                 android:textSize="14sp"
                 android:color="#FFFFFF"/>
@@ -60,7 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/detailed_content">
+            android:id="@+id/detailed_content"
+            android:padding="22dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +75,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="Committees:"
-                    android:textSize="26sp" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,8 +87,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:text="Recently Sponsored bills:"
-                android:textSize="26sp" />
+                android:text="Sponsored bills:"
+                android:textSize="22sp"
+                android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

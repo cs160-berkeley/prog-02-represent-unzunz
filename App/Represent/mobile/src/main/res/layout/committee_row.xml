@@ -5,6 +5,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="something something"
-        android:id="@+id/committee_name"/>
+        android:padding="24dp"
+        android:gravity="right"
+        android:text="Committee name"
+        android:id="@+id/committee_name"
+        android:background="@drawable/text_view_border"/>
 </LinearLayout>

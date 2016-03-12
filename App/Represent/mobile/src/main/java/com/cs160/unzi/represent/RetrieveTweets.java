@@ -143,10 +143,10 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 
-        Log.i("RetrieveTweets", "ok");
-        Intent toWatch = new Intent(mContext, sendWatchData.class);
-        toWatch.putExtra("watchContent", watchContent);
-        mContext.startService(toWatch);
+//        Log.i("RetrieveTweets", "ok");
+//        Intent toWatch = new Intent(mContext, sendWatchData.class);
+//        toWatch.putExtra("watchContent", watchContent);
+//        mContext.startService(toWatch);
 
 
     }
