@@ -137,6 +137,8 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         intent.putExtra("repsInfo", repsInfo);
         intent.putExtra("recentTweets", mostRecentTweets);
         intent.putExtra("repPictures", repBitmapPics);
+        intent.putExtra("latitude", "0.0");
+        intent.putExtra("longitude", "0.0");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 

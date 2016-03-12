@@ -29,11 +29,7 @@ public class PhoneListenerService extends WearableListenerService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String new_location = retrieveZipCodes();
-        Log.i("NEW LOCATION: ", new_location);
-        Intent try_again = new Intent(this, RetrieveContent.class);
-        try_again.putExtra("LOCATION", new_location);
-        startService(intent);
+        newLocation();
         return START_STICKY;
     }
 
@@ -56,14 +52,21 @@ public class PhoneListenerService extends WearableListenerService {
             String committee_url = "https://congress.api.sunlightfoundation.com/committees?member_ids=" + rep_id + "&apikey=" + sunlightKey;
             new RetrieveRepDetails(this.getBaseContext(), rep_name, end_term, rep_pic).execute(bill_url, committee_url);
         } else if (messageEvent.getPath().equalsIgnoreCase("/shake")) {
-            String new_location = retrieveZipCodes();
-            Log.i("NEW LOCATION: ", new_location);
-
-            Intent intent = new Intent(this, RetrieveContent.class);
-            intent.putExtra("LOCATION", new_location);
-            startService(intent);
+            newLocation();
         }
     }
+
+    private void newLocation() {
+        String new_location = retrieveZipCodes();
+        Log.i("NEW LOCATION: ", new_location);
+        Intent intent = new Intent(this, RetrieveContent.class);
+        intent.putExtra("LOCATION", new_location);
+        intent.putExtra("fromShake", true);
+        intent.putExtra("latitude", "0.0");
+        intent.putExtra("longitude", "0.0");
+        startService(intent);
+    }
+
 
     private String retrieveZipCodes() {
         ArrayList<String> zipcodes = new ArrayList<String>();

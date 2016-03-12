@@ -29,12 +29,13 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
     private Context mContext;
     private String bearerToken;
     private String[] presResults;
+    private boolean fromShake;
 
-
-    public RetrieveRepresentatives(Context context, String bearer_token, String[] pres_results) {
+    public RetrieveRepresentatives(Context context, String bearer_token, String[] pres_results, boolean from_shake) {
         mContext = context;
         bearerToken = bearer_token;
         presResults = pres_results;
+        fromShake = from_shake;
     }
 
     protected ArrayList<HashMap<String, String>> doInBackground(String... urls) {
@@ -67,7 +68,7 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
         HashMap<String, String> twitterIds = new HashMap<String, String>();
         HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
         HashMap<String, Bitmap> repBitMapPictures = new HashMap<String, Bitmap>();
-        HashMap<String, String[]> watchContent = new HashMap<String,String[]>();
+        HashMap<String, String[]> watchContent = new HashMap<String, String[]>();
         String full_name;
 
         for (HashMap<String, String> rep : reps_info) {
@@ -84,12 +85,17 @@ public class RetrieveRepresentatives extends AsyncTask<String, Void, ArrayList<H
             watchContent.put(full_name, info);
         }
 
-        if (!twitterIds.isEmpty()) {
-            watchContent.put("pres_results", presResults);
-            RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds,
-                                                            mostRecentTweets, repBitMapPictures,
-                                                            reps_info, watchContent);
-            tweetsAsync.execute();
+        if (reps_info.isEmpty() && fromShake) {
+            Intent needLocation = new Intent(mContext, PhoneListenerService.class);
+            mContext.startService(needLocation);
         }
+        watchContent.put("pres_results", presResults);
+        RetrieveTweets tweetsAsync = new RetrieveTweets(mContext, bearerToken, twitterIds,
+                mostRecentTweets, repBitMapPictures,
+                reps_info, watchContent);
+        tweetsAsync.execute();
+
     }
+
+
 }

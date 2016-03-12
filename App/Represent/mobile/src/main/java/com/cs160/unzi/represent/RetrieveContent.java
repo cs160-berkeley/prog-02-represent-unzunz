@@ -2,6 +2,7 @@ package com.cs160.unzi.represent;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -51,11 +52,11 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
     private String state;
     private String county;
     private String zipCode;
-    private String latitude = "";
-    private String longitude = "";
+    private Double latitude;
+    private Double longitude;
     private String[] presResults;
-
-    private Location current_location = null;
+    private boolean fromShake;
+    private Context mContext;
     private GoogleApiClient mGoogleApiClient;
     private GeoApiContext mGeoContext;
 
@@ -70,6 +71,7 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
         super.onCreate();
         TwitterAuthConfig authConfig = new TwitterAuthConfig(twitterConsumerKey, twitterConsumerSecret);
         Fabric.with(this, new Twitter(authConfig));
+        mContext = this;
 
         RetrieveTwitterBearerToken TwitterAsyncTask = new RetrieveTwitterBearerToken(new RetrieveTwitterBearerToken.AsyncResponse() {
             @Override
@@ -89,20 +91,28 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
                     .build();
         }
 
+        mGoogleApiClient.connect();
+
         mGeoContext = new GeoApiContext().setApiKey(GeocodeKey);
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
         final String location_string = extras.getString("LOCATION");
-        if (location_string == "") {
+        latitude = Double.parseDouble(extras.getString("latitude"));
+        longitude = Double.parseDouble(extras.getString("longitude"));
+
+        fromShake = extras.getBoolean("fromShake");
+        if (location_string.equals("")) {
             search_type = latLongSearch;
         } else {
             search_type = zipCodeSearch;
             zipCode = location_string;
         }
+
         setLocation(search_type);
         return START_STICKY;
+
     }
 
 
@@ -111,11 +121,10 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
         if (search_type == zipCodeSearch) {
             url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + zipCode + "&apikey=" + sunlightKey;
         } else {
-            url_string = "congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
+            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?latitude=" +
                     latitude + "&longitude=" + longitude + "&apikey=" + sunlightKey;
-//            url_string = "https://congress.api.sunlightfoundation.com/legislators/locate?zip=" + "94704" + "&apikey=" + sunlightKey;
         }
-        RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(this.getBaseContext(), bearerToken, presResults);
+        RetrieveRepresentatives asyncTask = new RetrieveRepresentatives(this.getBaseContext(), bearerToken, presResults, fromShake);
         asyncTask.execute(url_string);
     }
 
@@ -124,7 +133,7 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
         if (search_type == zipCodeSearch) {
             geocode_request = GeocodingApi.geocode(mGeoContext, zipCode);
         } else {
-            LatLng location_input = new LatLng(current_location.getLatitude(), current_location.getLongitude());
+            LatLng location_input = new LatLng(latitude, longitude);
             geocode_request = GeocodingApi.reverseGeocode(mGeoContext, location_input);
         }
         geocode_request.setCallback(new PendingResult.Callback<GeocodingResult[]>() {
@@ -135,6 +144,7 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
                     AddressComponentType[] component_types = component.types;
                     for (int i = 0; i < component_types.length; i++) {
                         AddressComponentType component_type = component_types[i];
+                        Log.i("PLS", String.valueOf(component_type));
                         if (component_type.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1)) {
                             state = component.shortName;
                             Log.i("STATE", state);
@@ -147,31 +157,39 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
                 Log.i("COUNTY", county);
                 Log.i("STATE", state);
                 presResults = getPresidentialResults(state, county);
+                if (presResults == null) {
+                    if (fromShake) {
+                        Log.i("1HERE", " ???");
+                        Intent needLocation = new Intent(mContext, PhoneListenerService.class);
+                        startService(needLocation);
+                    } else {
+                        Log.i("HERE", "??? ");
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        mContext.startActivity(intent);
+                    }
+                }
                 try {
                     retrieveRepresentatives();
                 } catch (IOException e) {
                     Log.e("ERROR GEO", e.getMessage());
+
                 }
             }
 
             @Override
             public void onFailure(Throwable e) {
+                Log.i("HUH", "JU");
                 Log.i("ERROR ONCONNECTED", e.getMessage());
+                Intent needLocation = new Intent(mContext, PhoneListenerService.class);
+                mContext.startService(needLocation);
             }
         });
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i("WE", "CONNECTED");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            current_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
-        if (current_location != null) {
-            Log.i("CURRENT_LOCATION", current_location.toString());
-            latitude = String.valueOf(current_location.getLatitude());
-            longitude = String.valueOf(current_location.getLongitude());
-        }
     }
 
     private String[] getPresidentialResults(String state, String county) {
