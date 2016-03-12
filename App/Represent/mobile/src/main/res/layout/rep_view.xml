@@ -3,14 +3,34 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="186dp"
-    android:background="#ffffff">
+    android:background="@drawable/text_view_border">
 
-    <ImageView
-        android:layout_weight="3"
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="186dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:padding="12dp">
+    <TextView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:gravity="center"
+        android:layout_gravity="center_vertical|right"
+        android:text="D"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
+        android:background="@drawable/blue_circle_bg"
+        android:id="@+id/rep_party"
+        android:elevation="2dp"/>
+    <ImageView
+        android:layout_width="166dp"
+        android:layout_height="166dp"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/circle"
-        android:id="@+id/rep_pic" />
+        android:background="#FFFFFF"
+        android:id="@+id/rep_pic"
+        android:padding="12dp"
+        android:elevation="1dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_weight="4"
@@ -22,15 +42,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
+            android:lineSpacingExtra="6dp"
             android:text="Barbara Lee"
             android:textSize="18sp"
+            android:textColor="@color/textPrimary"
             android:color="#FFFFFF"
             android:id="@+id/rep_name" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
+            android:lineSpacingExtra="6dp"
             android:text="barbs@gmail.com"
             android:textSize="12sp"
             android:color="#FFFFFF"
@@ -38,7 +59,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
+            android:lineSpacingExtra="6dp"
             android:text="http://leehouse.com"
             android:textSize="12sp"
             android:color="#FFFFFF"
@@ -46,10 +67,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:textSize="12sp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             android:color="#FFFFFF"
+            android:lineSpacingExtra="6dp"
             android:id="@+id/rep_tweet"/>
-
     </LinearLayout>
 </LinearLayout>

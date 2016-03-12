@@ -66,6 +66,17 @@ public class CongressionalViewActivity extends AppCompatActivity {
                 TextView webView = (TextView) view.findViewById(R.id.rep_web);
                 TextView tweetView = (TextView) view.findViewById(R.id.rep_tweet);
                 ImageView picView = (ImageView) view.findViewById(R.id.rep_pic);
+                TextView partyView = (TextView) view.findViewById(R.id.rep_party);
+
+                String party = rep.get("party");
+                partyView.setText(party);
+                Log.i("PARTY", party);
+                Log.i("NAME", full_name);
+                if (party.equals("D")) {
+                    partyView.setBackgroundResource(R.drawable.blue_circle_bg);
+                } else {
+                    partyView.setBackgroundResource(R.drawable.red_circle_bg);
+                }
 
                 if (repPictures.get(full_name) != null) {
                     picView.setImageBitmap(repPictures.get(full_name));

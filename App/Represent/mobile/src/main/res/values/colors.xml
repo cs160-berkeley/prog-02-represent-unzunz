@@ -6,4 +6,8 @@
 
     <color name="demoBlue">#64B5F6</color>
     <color name="repubRed">#E57373</color>
+
+    <color name="textPrimary">#555555</color>
+    <color name="lightGray">#888888</color>
+    <color name="lighterGray">#999999</color>
 </resources>

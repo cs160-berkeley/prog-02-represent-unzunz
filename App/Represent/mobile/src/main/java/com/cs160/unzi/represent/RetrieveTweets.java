@@ -101,9 +101,14 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
                 image_url = image_url.replace("_normal","");
                 String text = object_0.get("text").toString();
 
-
+                if (text.length() > 72) {
+                    String short_tweet = text.substring(0, 70);
+                    int i = short_tweet.lastIndexOf(" ");
+                    text = "\"" + short_tweet.substring(0, i) + " " + "..." + "\"";
+                } else {
+                    text = " " + text + " ";
+                }
                 mostRecentTweets.put(rep.getKey(), text);
-                Log.i("RetrieveTweets", "BITMAP STUFF");
 
                 try {
                     URL url = new URL(image_url);
