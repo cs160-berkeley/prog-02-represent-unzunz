@@ -28,9 +28,8 @@ public class JSONparser {
     private static StringBuilder result;
 
     public static JSONObject makeHttpRequest(String url) {
-        try {Log.i("HELLO", "HOHOHO");
+        try {
             URL sunlight_url = new URL(url);
-
             sunlightConnection = (HttpsURLConnection) sunlight_url.openConnection();
             sunlightConnection.setRequestMethod("GET");
             sunlightConnection.setDoOutput(false);

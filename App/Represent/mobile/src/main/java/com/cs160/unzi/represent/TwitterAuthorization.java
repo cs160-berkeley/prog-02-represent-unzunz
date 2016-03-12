@@ -68,9 +68,6 @@ public class TwitterAuthorization {
         }
 
         try {
-//            int status = twitterConnection.getResponseCode();
-//            Log.i("MESSAGE", twitterConnection.getResponseMessage());
-
             InputStream in = new BufferedInputStream(twitterConnection.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             result = new StringBuilder();
@@ -87,7 +84,6 @@ public class TwitterAuthorization {
             JSONObject json_object = new JSONObject(result.toString());
             String tokenType = (String) json_object.get("token_type");
             String token = (String) json_object.get("access_token");
-            Log.i("TOKEN: ", token);
             return token;
         } catch (JSONException e) {
             Log.e("ERROR", e.getMessage());

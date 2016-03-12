@@ -4,19 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Base64;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,18 +42,14 @@ public class DetailedViewActivity extends AppCompatActivity {
             picView.setImageBitmap(rep_image);
         }
         rep_name.setText(repName);
-        Log.i("ENDTER", endTerm);
         end_term.setText(endTerm);
 
-        Log.i("HSDKLFJ", billInfo.toString());
-        Log.i("HSDKLFJ", committeeInfo.toString());
         LinearLayout committees_view = (LinearLayout) findViewById(R.id.committees);
         LinearLayout bills_view = (LinearLayout) findViewById(R.id.bills);
 
         for (HashMap<String, String> committee : committeeInfo) {
             View committee_view = getLayoutInflater().inflate(R.layout.committee_row, bills_view, false);
             TextView committeeName = (TextView) committee_view.findViewById(R.id.committee_name);
-            Log.i("COMMITTEE", committee.get("name"));
             committeeName.setText(committee.get("name"));
             committees_view.addView(committee_view);
         }
@@ -68,12 +58,12 @@ public class DetailedViewActivity extends AppCompatActivity {
             View bill_view = getLayoutInflater().inflate(R.layout.bill_row, bills_view, false);
             TextView billName = (TextView) bill_view.findViewById(R.id.bill_name);
             TextView billDate = (TextView) bill_view.findViewById(R.id.bill_date);
+            String bill_name = bill.get("official_title");
             billDate.setText(bill.get("introduced_on"));
-            billName.setText(bill.get("official_title"));
+            billName.setText(bill_name);
             bills_view.addView(bill_view);
         }
     }
-
 
     private Bitmap StringToBitMap(String encodedString){
         try {

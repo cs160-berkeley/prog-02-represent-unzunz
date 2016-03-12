@@ -40,7 +40,11 @@ public class RetrieveRepDetails extends AsyncTask<String, Void, HashMap<String, 
             for (int i = 0; i < json_bills.length(); i++) {
                 JSONObject bill_json = (JSONObject) json_bills.get(i);
                 HashMap<String, String> bill = new HashMap<String, String>();
-                bill.put("official_title", bill_json.get("short_title").toString());
+                if (bill_json.get("short_title").equals(null)) {
+                    bill.put("official_title", bill_json.get("official_title").toString());
+                } else {
+                    bill.put("official_title", bill_json.get("short_title") .toString());
+                }
                 bill.put("introduced_on", bill_json.get("introduced_on").toString());
                 bill_info.add(bill);
             }

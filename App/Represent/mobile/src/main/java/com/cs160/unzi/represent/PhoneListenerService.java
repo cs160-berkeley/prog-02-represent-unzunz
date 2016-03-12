@@ -28,6 +28,16 @@ public class PhoneListenerService extends WearableListenerService {
     private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String new_location = retrieveZipCodes();
+        Log.i("NEW LOCATION: ", new_location);
+        Intent try_again = new Intent(this, RetrieveContent.class);
+        try_again.putExtra("LOCATION", new_location);
+        startService(intent);
+        return START_STICKY;
+    }
+
+    @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.i("I GOT IT THE MESSAGE!!", "I GOT!!");
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());

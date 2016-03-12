@@ -33,9 +33,6 @@ import java.util.HashMap;
 
 public class CongressionalViewActivity extends AppCompatActivity {
 
-//    private HashMap<String, String> twitterIds = new HashMap<String, String>();
-//    private HashMap<String, String> mostRecentTweets = new HashMap<String, String>();
-//    private HashMap<String, String> repPictures = new HashMap<String, String>();
     private final String sunlightKey = "946f65d6df5c4ae2b5f9ddb58fd867f5";
     private HashMap<String, String> repsId = new HashMap<String, String>();
     private HashMap<String, String> repsEndTerm = new HashMap<String, String>();
@@ -47,10 +44,6 @@ public class CongressionalViewActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> repsInfo = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("repsInfo");
         HashMap<String, String> mostRecentTweets = (HashMap<String, String>) getIntent().getSerializableExtra("recentTweets");
         HashMap<String, Bitmap> repPictures = (HashMap<String, Bitmap>) getIntent().getSerializableExtra("repPictures");
-//
-        Log.i("WE HEREEE", repsInfo.toString());
-        Log.i("WE HEREEE", mostRecentTweets.toString());
-        Log.i("WE HEREEE", repPictures.toString());
 
         LinearLayout congressionalLayout = (LinearLayout) findViewById(R.id.congressional_content);
         String full_name;
@@ -70,8 +63,6 @@ public class CongressionalViewActivity extends AppCompatActivity {
 
                 String party = rep.get("party");
                 partyView.setText(party);
-                Log.i("PARTY", party);
-                Log.i("NAME", full_name);
                 if (party.equals("D")) {
                     partyView.setBackgroundResource(R.drawable.blue_circle_bg);
                 } else {

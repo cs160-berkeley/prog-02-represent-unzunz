@@ -8,13 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,7 +25,6 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +32,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
@@ -241,10 +233,6 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-//    protected void onStart() {
-//        mGoogleApiClient.connect();
-//        super.onStart();
-//    }
 
     @Override
     public IBinder onBind(Intent intent) {

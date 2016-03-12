@@ -48,7 +48,6 @@ public class sendWatchData extends Service implements GoogleApiClient.Connection
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         watchContent = (HashMap<String,  String[]>) intent.getSerializableExtra("watchContent");
-        Log.i("SEND", "WATCH DATA");
         new DataTask (mContext, watchContent).execute();
         return START_STICKY;
     }
@@ -72,7 +71,7 @@ public class sendWatchData extends Service implements GoogleApiClient.Connection
             }
 
             PutDataRequest request = dataMap.asPutDataRequest();
-            Log.i("SEND", "SENDINGGGG");
+            Log.i("SEND", "TO WATCH");
             DataApi.DataItemResult dataItemResult = Wearable.DataApi
                     .putDataItem(mGoogleApiClient, request).await();
             return null;

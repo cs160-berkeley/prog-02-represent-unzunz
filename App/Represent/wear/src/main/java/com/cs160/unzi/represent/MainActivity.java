@@ -69,7 +69,6 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.i("HERE", "DATA");
         for (DataEvent event : dataEvents) {
             String eventUri = event.getDataItem().getUri().toString();
             if (eventUri.contains("/watchContent")) {

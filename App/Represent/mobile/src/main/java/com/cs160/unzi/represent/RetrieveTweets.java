@@ -78,9 +78,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
 
             try {
                 int status = twitterConnection.getResponseCode();
-//                Log.i("STATUS", String.valueOf(status));
-//                Log.i("MESSAGE", twitterConnection.getResponseMessage());
-
                 InputStream in = new BufferedInputStream(twitterConnection.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 result = new StringBuilder();
@@ -143,7 +140,6 @@ public class RetrieveTweets extends AsyncTask<String, Void, String> {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 
-        Log.i("RetrieveTweets", "ok");
         Intent toWatch = new Intent(mContext, sendWatchData.class);
         toWatch.putExtra("watchContent", watchContent);
         mContext.startService(toWatch);

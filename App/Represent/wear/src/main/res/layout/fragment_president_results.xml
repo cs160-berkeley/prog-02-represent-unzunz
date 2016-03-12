@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="49%"
-            android:textColor="#000000"
+            android:textColor="@color/fontPrimary"
             android:textSize="26sp"
             android:layout_marginBottom="122dp"
             android:id="@+id/obama_results"/>
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="31%"
-            android:textColor="#000000"
+            android:textColor="@color/fontPrimary"
             android:textSize="26sp"
             android:layout_marginBottom="122dp"
             android:id="@+id/romney_results"/>
@@ -45,18 +45,18 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Obama"
-            android:textColor="#000000"
+            android:textColor="@color/fontPrimary"
             android:textSize="12sp"
-            android:layout_marginBottom="78dp" />
+            android:layout_marginBottom="98dp" />
         <TextView
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Romney"
-            android:textColor="#000000"
+            android:textColor="@color/fontPrimary"
             android:textSize="12sp"
-            android:layout_marginBottom="78dp" />
+            android:layout_marginBottom="98dp" />
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:layout_gravity="center_vertical"
             android:text="San Diego, CA"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:id="@+id/location"/>
 

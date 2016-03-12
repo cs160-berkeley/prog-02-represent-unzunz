@@ -25,7 +25,6 @@ public class PresidentialResults {
         JSONArray jsonArray;
 
         try {
-            Log.i("CONTEXT", mContext.toString());
             InputStream input_stream = mContext.getAssets().open("election-county-2012.json");
             int size = input_stream.available();
             byte[] byte_buffer = new byte[size];
