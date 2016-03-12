@@ -1,14 +1,14 @@
 # PROG 02: Represent!
 
-Briefly describe your app here.
+This simple app lets users look up congressional representatives in a selected area.
 
 ## Authors
 
-FirstName LastName ([your_email@berkeley.edu](mailto:your_email@berkeley.edu))
+Unzi Park unzi.park@berkeley.edu
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+See https://youtu.be/hMrCgDVUr44
 
 ## Screenshots
 
