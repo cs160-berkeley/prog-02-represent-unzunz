@@ -99,8 +99,10 @@ public class RetrieveContent extends Service implements GoogleApiClient.Connecti
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
         final String location_string = extras.getString("LOCATION");
-        latitude = Double.parseDouble(extras.getString("latitude"));
-        longitude = Double.parseDouble(extras.getString("longitude"));
+        if (extras.getString("latitude") != null && extras.getString("longitude") != null) {
+            latitude = Double.parseDouble(extras.getString("latitude"));
+            longitude = Double.parseDouble(extras.getString("longitude"));
+        }
 
         fromShake = extras.getBoolean("fromShake");
         if (location_string.equals("")) {
